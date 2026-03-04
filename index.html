@@ -7,6 +7,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DISCIPLINE">
 <meta name="theme-color" content="#141414">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
+<link rel="apple-touch-icon" sizes="76x76" href="icon-76.png">
 <title>Discipline Equals Freedom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -28,7 +34,6 @@
   input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   input[type=number] { -moz-appearance: textfield; }
   button { font-family: inherit; }
-
   .header {
     padding: 16px 16px 12px;
     padding-top: max(16px, env(safe-area-inset-top, 16px));
@@ -39,13 +44,9 @@
   .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
   .week-label { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: 0.12em; }
   .day-title { font-size: 20px; font-weight: 800; margin-top: 2px; }
-  .gear-badge {
-    padding: 4px 10px; border-radius: 6px; font-size: 9px; font-weight: 700;
-    letter-spacing: 0.08em; white-space: nowrap;
-  }
+  .gear-badge { padding: 4px 10px; border-radius: 6px; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; }
   .gear-gym { background: var(--accent); }
   .gear-min { background: var(--green); }
-
   .nav-grid { display: flex; gap: 4px; margin-top: 12px; }
   .nav-week { flex: 1; }
   .nav-week-btn {
@@ -62,7 +63,6 @@
   .nav-day-btn:first-child { border-radius: 0 0 0 4px; }
   .nav-day-btn:last-child { border-radius: 0 0 4px 0; }
   .nav-day-btn.active { background: rgba(139,0,0,0.6); color: #fff; }
-
   .progress-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
   .progress-bar-wrap { flex: 1; }
   .progress-info { display: flex; justify-content: space-between; font-size: 10px; color: var(--dim); margin-bottom: 4px; }
@@ -70,16 +70,13 @@
   .progress-fill { height: 4px; border-radius: 2px; transition: width 0.3s; }
   .progress-fill.done { background: var(--green); }
   .progress-fill.active { background: var(--accent); }
-
   .ctrl-btn {
     background: rgba(255,255,255,0.08); border: none; border-radius: 8px;
     color: #fff; padding: 6px 12px; font-size: 12px; font-weight: 700;
     cursor: pointer; font-family: 'DM Mono', monospace;
   }
   .ctrl-btn.running { background: rgba(139,0,0,0.3); border: 1px solid var(--accent); }
-
   .content { padding: 12px 12px 100px; }
-
   .exercise-card {
     background: var(--card); border-radius: 12px; margin-bottom: 6px;
     overflow: hidden; border: 1px solid var(--border); transition: all 0.15s;
@@ -93,7 +90,6 @@
   .ex-name.done { color: var(--green-light); }
   .ex-sub { font-size: 11px; color: var(--dim); margin-top: 2px; }
   .ex-count { font-size: 13px; font-weight: 700; font-family: 'DM Mono', monospace; }
-
   .sets-area { padding: 0 10px 12px; }
   .set-headers {
     display: flex; gap: 6px; font-size: 9px; color: var(--dim);
@@ -114,25 +110,19 @@
   }
   .set-input.reps { width: 46px; }
   .set-input.saved { background: transparent; border-color: transparent; }
-  .set-rest-badge {
-    font-size: 9px; color: var(--dim); font-family: 'DM Mono', monospace;
-    width: 32px; text-align: center;
-  }
+  .set-rest-badge { font-size: 9px; color: var(--dim); font-family: 'DM Mono', monospace; width: 32px; text-align: center; }
   .set-log-btn {
     width: 36px; height: 36px; border-radius: 8px; border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 700; background: var(--accent); color: #fff;
-    flex-shrink: 0;
+    font-size: 16px; font-weight: 700; background: var(--accent); color: #fff; flex-shrink: 0;
   }
   .set-log-btn.saved { background: rgba(45,106,79,0.15); color: var(--green-light); }
   .set-log-btn:disabled { opacity: 0.4; }
   .set-log-btn:active { transform: scale(0.95); }
-
   .form-note {
     margin-top: 8px; padding: 8px 10px; border-radius: 8px;
     background: rgba(139,0,0,0.08); font-size: 11px; color: var(--yellow); line-height: 1.5;
   }
-
   .metcon-card {
     background: var(--card-active); border-radius: 12px; margin-bottom: 8px;
     border: 1px solid rgba(139,0,0,0.3); padding: 16px; overflow: hidden;
@@ -144,10 +134,7 @@
   .metcon-timer-row { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
   .metcon-time { font-size: 32px; font-weight: 800; font-family: 'DM Mono', monospace; }
   .metcon-time.running { color: var(--accent); }
-  .metcon-btn {
-    border: none; border-radius: 8px; color: #fff; padding: 8px 20px;
-    font-size: 14px; font-weight: 700; cursor: pointer;
-  }
+  .metcon-btn { border: none; border-radius: 8px; color: #fff; padding: 8px 20px; font-size: 14px; font-weight: 700; cursor: pointer; }
   .metcon-btn.start { background: var(--green); }
   .metcon-btn.stop { background: rgba(255,255,255,0.15); }
   .metcon-btn.finish { background: var(--accent); padding: 8px 16px; font-size: 12px; }
@@ -157,10 +144,42 @@
     border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 14px;
     font-family: 'DM Mono', monospace; outline: none;
   }
-  .metcon-log-btn {
-    background: var(--green); border: none; border-radius: 8px; color: #fff;
-    padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer;
+  .metcon-log-btn { background: var(--green); border: none; border-radius: 8px; color: #fff; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+  /* DAY NOTES */
+  .day-notes-card {
+    background: var(--card); border-radius: 12px; margin-top: 12px;
+    border: 1px solid var(--border); padding: 16px; overflow: hidden;
   }
+  .day-notes-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+  }
+  .day-notes-label { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: 0.1em; }
+  .day-notes-saved { font-size: 10px; color: var(--green-light); font-weight: 600; opacity: 0; transition: opacity 0.3s; }
+  .day-notes-saved.show { opacity: 1; }
+  .day-notes-prompts {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+  }
+  .day-notes-prompt {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px; padding: 4px 8px; font-size: 10px; color: var(--dim);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .day-notes-prompt:active { background: rgba(139,0,0,0.15); color: var(--med); }
+  .day-notes-textarea {
+    width: 100%; min-height: 100px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+    padding: 12px; color: #fff; font-size: 13px; line-height: 1.6;
+    font-family: 'DM Sans', system-ui, sans-serif; outline: none;
+    resize: vertical; transition: border-color 0.2s;
+  }
+  .day-notes-textarea:focus { border-color: rgba(139,0,0,0.4); }
+  .day-notes-textarea::placeholder { color: rgba(255,255,255,0.15); }
+  .day-notes-meta {
+    display: flex; justify-content: space-between; align-items: center; margin-top: 8px;
+  }
+  .day-notes-date { font-size: 10px; color: var(--dim); }
+  .day-notes-count { font-size: 10px; color: var(--dim); font-family: 'DM Mono', monospace; }
 
   .rest-timer {
     position: fixed; bottom: 0; left: 0; right: 0;
@@ -174,23 +193,12 @@
   .rest-exercise { font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 1px; font-weight: 500; }
   .rest-time { font-size: 28px; font-weight: 800; font-family: 'DM Mono', monospace; }
   .rest-controls { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-  .rest-preset {
-    background: rgba(255,255,255,0.1); border: none; border-radius: 6px;
-    color: #fff; padding: 5px 8px; font-size: 11px; cursor: pointer;
-    font-family: 'DM Mono', monospace;
-  }
+  .rest-preset { background: rgba(255,255,255,0.1); border: none; border-radius: 6px; color: #fff; padding: 5px 8px; font-size: 11px; cursor: pointer; font-family: 'DM Mono', monospace; }
   .rest-preset.active-preset { background: rgba(255,255,255,0.25); }
-  .rest-toggle {
-    border: none; border-radius: 6px; color: #fff; padding: 5px 10px;
-    font-size: 12px; cursor: pointer; font-weight: 700;
-  }
+  .rest-toggle { border: none; border-radius: 6px; color: #fff; padding: 5px 10px; font-size: 12px; cursor: pointer; font-weight: 700; }
   .rest-toggle.pause { background: rgba(255,255,255,0.2); }
   .rest-toggle.play { background: var(--green); }
-  .rest-close {
-    background: rgba(255,255,255,0.1); border: none; border-radius: 6px;
-    color: #fff; padding: 5px 8px; font-size: 12px; cursor: pointer;
-  }
-
+  .rest-close { background: rgba(255,255,255,0.1); border: none; border-radius: 6px; color: #fff; padding: 5px 8px; font-size: 12px; cursor: pointer; }
   .loading { text-align: center; padding: 60px 20px; color: var(--dim); font-size: 14px; }
   .error-msg { text-align: center; padding: 60px 20px; color: var(--accent); font-size: 14px; line-height: 1.6; }
   .toast {
@@ -201,19 +209,21 @@
   }
   .toast.show { opacity: 1; }
   .toast.undo { background: #b85c00; }
+  .skeleton-card { background: var(--card); border-radius: 12px; margin-bottom: 6px; padding: 16px 14px; border: 1px solid var(--border); }
+  .skeleton-bar { height: 14px; border-radius: 4px; background: rgba(255,255,255,0.04); animation: pulse 1.2s ease-in-out infinite; }
+  .skeleton-bar.short { width: 45%; margin-top: 6px; height: 10px; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 </style>
 </head>
 <body>
-
 <div id="toast" class="toast"></div>
-
 <div class="header" id="header">
   <div class="header-top">
     <div>
-      <div class="week-label" id="weekLabel"></div>
-      <div class="day-title" id="dayTitle"></div>
+      <div class="week-label" id="weekLabel">WEEK 1 — DISCIPLINE</div>
+      <div class="day-title" id="dayTitle">Loading...</div>
     </div>
-    <div class="gear-badge" id="gearBadge"></div>
+    <div class="gear-badge gear-gym" id="gearBadge">—</div>
   </div>
   <div class="nav-grid" id="navGrid"></div>
   <div class="progress-row">
@@ -222,518 +232,282 @@
         <span id="setCount">0/0 sets</span>
         <span id="setPct">0%</span>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     </div>
     <button class="ctrl-btn" id="workoutTimer" onclick="toggleWorkoutTimer()">START</button>
   </div>
 </div>
-
 <div class="content" id="content"></div>
 <div class="rest-timer" id="restTimer" style="display:none;"></div>
-
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyPUKfdLB-GmOu3rv4yH9m5hk1ZoedhYv4MHAB9F1ukfxNtDYlaZN_JA9z5MKWEe81D/exec";
-const WEEK_NAMES = {1:"DISCIPLINE",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"};
-const DAY_MAP = {1:"MON",2:"TUE",3:"THU",4:"FRI"};
 
-// === SMART REST TIME ENGINE ===
-// Based on 2024 meta-analysis (Singer et al., Frontiers in Sports):
-// - Heavy strength (1-5 reps, ≥85% 1RM): 3-5 min for full phosphocreatine recovery
-// - Hypertrophy (6-12 reps, 65-80% 1RM): 90-120s optimal for growth
-// - Higher rep / accessories (12+ reps): 60-90s
-// - Deload: 90s universal
-// - Test/max attempts: 240s for CNS recovery
-
-const HEAVY_COMPOUNDS = ['Back Squat','Bench Press','Deadlift'];
-const COMPOUNDS = ['Incline DB Press','Strict OHP','Close-Grip Bench Press','DB Incline Press',
-  'Romanian Deadlift','Barbell Hip Thrust','Leg Press','DB Bulgarian Split Squat',
-  'DB Romanian Deadlift','DB Single-Leg RDL','DB RDL','Weighted Step-Ups',
-  'Walking Lunges','DB Front Squats','DB Goblet Squat','DB Floor Press',
-  'DB Shoulder Press','DB Shoulder Press (seated)','DB Squat + Press (goblet)'];
-const WEIGHTED_BW = ['Weighted Pull-Ups','Weighted Dips','Weighted Vest Push-Ups',
-  'Weighted Vest Chin-Ups','Weighted Vest Push-Ups (wide)',
-  'Weighted Vest Inverted Row','Pull-Ups (bodyweight)'];
-const ISOLATION = ['DB Hammer Curl','DB Curl','DB Curl (alternating)','Tricep Rope Pushdown',
-  'Cable Flyes','Band Pull-Aparts','Band Face Pulls','DB Bent-Over Row',
-  'DB Row','DB Row (chest supported)','DB Row (heavy)','DB Row (light)',
-  'DB Farmer Hold + Shrugs','Push-Ups (slow tempo)','Single-Leg Glute Bridge',
-  'Weighted GHD Back Ext','Hollow Body Hold'];
-
-function getRestSeconds(exercise, targetReps, week) {
-  const name = exercise || '';
-  const reps = parseInt(targetReps) || 0;
-
-  // Week 4 = deload, everything gets 90s
-  if (week === 4) return 90;
-
-  // Test week max attempts (reps <= 3 on big lifts in week 3)
-  if (week === 3 && reps <= 3 && HEAVY_COMPOUNDS.some(c => name.includes(c))) return 240;
-  if (week === 3 && reps <= 3 && WEIGHTED_BW.some(c => name.includes(c))) return 210;
-  if (week === 3 && reps <= 3) return 180;
-
-  // Heavy compounds at low reps
-  if (HEAVY_COMPOUNDS.some(c => name.includes(c))) {
-    if (reps <= 3) return 210;  // 3.5 min
-    if (reps <= 5) return 180;  // 3 min
-    if (reps <= 8) return 150;  // 2.5 min
-    return 120;
-  }
-
-  // Weighted bodyweight movements
-  if (WEIGHTED_BW.some(c => name.includes(c))) {
-    if (reps <= 5) return 180;
-    if (reps <= 8) return 120;
-    return 90;
-  }
-
-  // Compound accessories
-  if (COMPOUNDS.some(c => name === c)) {
-    if (reps <= 5) return 150;
-    if (reps <= 8) return 120;
-    if (reps <= 10) return 90;
-    return 75;
-  }
-
-  // Isolation / small muscle
-  if (ISOLATION.some(c => name === c)) {
-    if (reps <= 8) return 90;
-    if (reps <= 12) return 75;
-    return 60;
-  }
-
-  // MAX reps sets
-  if (reps === 0 || targetReps === 'MAX') return 120;
-
-  // Fallback based on rep range
-  if (reps <= 3) return 180;
-  if (reps <= 5) return 150;
-  if (reps <= 8) return 120;
-  if (reps <= 12) return 90;
-  return 60;
+// === BELL SOUND ENGINE (Web Audio API) ===
+let audioCtx=null;
+function playBell(){
+  try{
+    if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const now=audioCtx.currentTime;
+    [830,1245,1660,2075].forEach((freq,i)=>{
+      const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+      osc.type='sine';osc.frequency.setValueAtTime(freq,now);
+      gain.gain.setValueAtTime([0.4,0.25,0.15,0.1][i],now);
+      gain.gain.exponentialRampToValueAtTime(0.001,now+1.8);
+      osc.connect(gain);gain.connect(audioCtx.destination);osc.start(now);osc.stop(now+1.8);
+    });
+    setTimeout(()=>{
+      const n2=audioCtx.currentTime;
+      [830,1245].forEach((freq,i)=>{
+        const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+        osc.type='sine';osc.frequency.setValueAtTime(freq,n2);
+        gain.gain.setValueAtTime([0.2,0.12][i],n2);
+        gain.gain.exponentialRampToValueAtTime(0.001,n2+1.2);
+        osc.connect(gain);gain.connect(audioCtx.destination);osc.start(n2);osc.stop(n2+1.2);
+      });
+    },350);
+  }catch(e){}
 }
+document.addEventListener('touchstart',function w(){
+  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  document.removeEventListener('touchstart',w);
+},{once:true});
 
-function formatRest(s) {
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  if (m > 0 && sec > 0) return `${m}:${sec.toString().padStart(2,'0')}`;
-  if (m > 0) return `${m}m`;
-  return `${s}s`;
+const API="https://script.google.com/macros/s/AKfycbyPUKfdLB-GmOu3rv4yH9m5hk1ZoedhYv4MHAB9F1ukfxNtDYlaZN_JA9z5MKWEe81D/exec";
+const WEEK_NAMES={1:"DISCIPLINE",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"};
+const DAY_MAP={1:"MON",2:"TUE",3:"THU",4:"FRI"};
+let allProgram=null,allLog=null,allMetcons=null,allDayNotes=null,dataLoaded=false;
+const HEAVY_COMPOUNDS=['Back Squat','Bench Press','Deadlift'];
+const COMPOUNDS=['Incline DB Press','Strict OHP','Close-Grip Bench Press','DB Incline Press','Romanian Deadlift','Barbell Hip Thrust','Leg Press','DB Bulgarian Split Squat','DB Romanian Deadlift','DB Single-Leg RDL','DB RDL','Weighted Step-Ups','Walking Lunges','DB Front Squats','DB Goblet Squat','DB Floor Press','DB Shoulder Press','DB Shoulder Press (seated)','DB Squat + Press (goblet)'];
+const WEIGHTED_BW=['Weighted Pull-Ups','Weighted Dips','Weighted Vest Push-Ups','Weighted Vest Chin-Ups','Weighted Vest Push-Ups (wide)','Weighted Vest Inverted Row','Pull-Ups (bodyweight)'];
+const ISOLATION=['DB Hammer Curl','DB Curl','DB Curl (alternating)','Tricep Rope Pushdown','Cable Flyes','Band Pull-Aparts','Band Face Pulls','DB Bent-Over Row','DB Row','DB Row (chest supported)','DB Row (heavy)','DB Row (light)','DB Farmer Hold + Shrugs','Push-Ups (slow tempo)','Single-Leg Glute Bridge','Weighted GHD Back Ext','Hollow Body Hold'];
+function getRestSeconds(exercise,targetReps,week){
+  const name=exercise||'',reps=parseInt(targetReps)||0;
+  if(week===4)return 90;
+  if(week===3&&reps<=3&&HEAVY_COMPOUNDS.some(c=>name.includes(c)))return 240;
+  if(week===3&&reps<=3&&WEIGHTED_BW.some(c=>name.includes(c)))return 210;
+  if(week===3&&reps<=3)return 180;
+  if(HEAVY_COMPOUNDS.some(c=>name.includes(c))){if(reps<=3)return 210;if(reps<=5)return 180;if(reps<=8)return 150;return 120;}
+  if(WEIGHTED_BW.some(c=>name.includes(c))){if(reps<=5)return 180;if(reps<=8)return 120;return 90;}
+  if(COMPOUNDS.some(c=>name===c)){if(reps<=5)return 150;if(reps<=8)return 120;if(reps<=10)return 90;return 75;}
+  if(ISOLATION.some(c=>name===c)){if(reps<=8)return 90;if(reps<=12)return 75;return 60;}
+  if(reps===0||targetReps==='MAX')return 120;
+  if(reps<=3)return 180;if(reps<=5)return 150;if(reps<=8)return 120;if(reps<=12)return 90;return 60;
 }
-
-let state = {
-  week: 1, day: 1,
-  program: [], log: [], metcons: [],
-  expandedEx: 0,
-  workoutRunning: false, workoutElapsed: 0, workoutInterval: null,
-  restRunning: false, restSeconds: 120, restTarget: 120, restInterval: null, restVisible: false,
-  restExercise: '',
-  metconRunning: false, metconSeconds: 0, metconInterval: null, metconFinished: false,
-  saving: {},
-};
-
-function today() { return new Date().toISOString().split("T")[0]; }
-
-function toast(msg, type) {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = "toast show" + (type === 'undo' ? ' undo' : '');
-  clearTimeout(t._timeout);
-  t._timeout = setTimeout(() => t.className = "toast", 2000);
+function formatRest(s){const m=Math.floor(s/60),sec=s%60;if(m>0&&sec>0)return m+':'+sec.toString().padStart(2,'0');if(m>0)return m+'m';return s+'s';}
+let state={week:1,day:1,expandedEx:0,workoutRunning:false,workoutElapsed:0,workoutInterval:null,restRunning:false,restSeconds:120,restTarget:120,restInterval:null,restVisible:false,restExercise:'',metconRunning:false,metconSeconds:0,metconInterval:null,metconFinished:false,saving:{},notesSaveTimeout:null};
+function today(){return new Date().toISOString().split("T")[0];}
+function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type==='undo'?' undo':'');clearTimeout(t._to);t._to=setTimeout(()=>t.className="toast",2000);}
+function getCurrentProgram(){return allProgram?allProgram.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
+function getCurrentLog(){return allLog?allLog.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
+function getCurrentMetcons(){return allMetcons?allMetcons.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
+function getCurrentDayNote(){
+  if(!allDayNotes)return null;
+  return allDayNotes.find(r=>r.Week==state.week&&r.Day==state.day)||null;
 }
-
-function buildNav() {
-  const grid = document.getElementById("navGrid");
-  grid.innerHTML = "";
-  for (let w = 1; w <= 4; w++) {
-    const col = document.createElement("div");
-    col.className = "nav-week";
-    const wb = document.createElement("button");
-    wb.className = "nav-week-btn" + (state.week === w ? " active" : "");
-    wb.textContent = "W" + w;
-    wb.onclick = () => { state.week = w; state.day = 1; loadWorkout(); };
-    col.appendChild(wb);
-    const days = document.createElement("div");
-    days.className = "nav-days";
-    for (let d = 1; d <= 4; d++) {
-      const db = document.createElement("button");
-      db.className = "nav-day-btn" + (state.week === w && state.day === d ? " active" : "");
-      db.textContent = DAY_MAP[d];
-      db.onclick = () => { state.week = w; state.day = d; loadWorkout(); };
-      days.appendChild(db);
+function buildNav(){
+  const g=document.getElementById("navGrid");g.innerHTML="";
+  for(let w=1;w<=4;w++){
+    const c=document.createElement("div");c.className="nav-week";
+    const wb=document.createElement("button");wb.className="nav-week-btn"+(state.week===w?" active":"");wb.textContent="W"+w;
+    wb.onclick=()=>{state.week=w;state.day=1;switchDay();};c.appendChild(wb);
+    const ds=document.createElement("div");ds.className="nav-days";
+    for(let d=1;d<=4;d++){
+      const db=document.createElement("button");db.className="nav-day-btn"+(state.week===w&&state.day===d?" active":"");
+      db.textContent=DAY_MAP[d];db.onclick=()=>{state.week=w;state.day=d;switchDay();};ds.appendChild(db);
     }
-    col.appendChild(days);
-    grid.appendChild(col);
+    c.appendChild(ds);g.appendChild(c);
   }
 }
-
-async function loadWorkout() {
-  const content = document.getElementById("content");
-  content.innerHTML = '<div class="loading">Loading workout...</div>';
+function switchDay(){state.expandedEx=0;state.metconFinished=false;state.metconSeconds=0;state.metconRunning=false;clearInterval(state.metconInterval);state.saving={};buildNav();render();}
+async function initialLoad(){
+  const c=document.getElementById("content");
+  c.innerHTML='<div class="skeleton-card"><div class="skeleton-bar" style="width:65%"></div><div class="skeleton-bar short"></div></div><div class="skeleton-card"><div class="skeleton-bar" style="width:50%"></div><div class="skeleton-bar short"></div></div><div class="skeleton-card"><div class="skeleton-bar" style="width:70%"></div><div class="skeleton-bar short"></div></div><div class="skeleton-card"><div class="skeleton-bar" style="width:55%"></div><div class="skeleton-bar short"></div></div>';
   buildNav();
-  try {
-    const res = await fetch(`${API}?action=getWorkout&week=${state.week}&day=${state.day}`);
-    const data = await res.json();
-    state.program = data.program || [];
-    state.log = data.log || [];
-    state.metcons = data.metcons || [];
-    state.expandedEx = 0;
-    state.metconFinished = false; state.metconSeconds = 0; state.metconRunning = false;
-    state.saving = {};
-    render();
-  } catch(e) {
-    content.innerHTML = '<div class="error-msg">Could not reach the sheet.<br><br>Make sure your Apps Script is deployed as "Anyone" and try refreshing.</div>';
-    console.error(e);
-  }
+  try{
+    const[pR,lR,mR,nR]=await Promise.all([
+      fetch(API+"?action=getProgram"),fetch(API+"?action=getLog"),
+      fetch(API+"?action=getMetcons"),fetch(API+"?action=getDayNotes")
+    ]);
+    const[pD,lD,mD,nD]=await Promise.all([pR.json(),lR.json(),mR.json(),nR.json()]);
+    allProgram=pD;allLog=lD;allMetcons=mD;allDayNotes=nD;dataLoaded=true;render();
+  }catch(e){c.innerHTML='<div class="error-msg">Could not reach the sheet.<br><br>Make sure your Apps Script is deployed as "Anyone" and try refreshing.</div>';console.error(e);}
+}
+function updateHeader(){
+  const p=getCurrentProgram(),title=p.length?p[0]["Day Title"]:"";
+  document.getElementById("weekLabel").textContent="WEEK "+state.week+" — "+WEEK_NAMES[state.week];
+  document.getElementById("dayTitle").textContent="DAY "+state.day+": "+title;
+  const gear=p.length?p[0].Gear:"";const b=document.getElementById("gearBadge");
+  b.textContent=gear==="MINIMAL"?"MINIMAL GEAR":"FULL GYM";b.className="gear-badge "+(gear==="MINIMAL"?"gear-min":"gear-gym");
+}
+function updateProgress(){
+  const log=getCurrentLog(),total=log.length,done=log.filter(l=>l["Actual Weight"]).length,pct=total?Math.round(done/total*100):0;
+  document.getElementById("setCount").textContent=done+"/"+total+" sets";
+  document.getElementById("setPct").textContent=pct+"%";
+  const f=document.getElementById("progressFill");f.style.width=pct+"%";f.className="progress-fill "+(pct===100?"done":"active");
+}
+function startRestTimer(sec,exName){
+  state.restTarget=sec;state.restSeconds=sec;state.restRunning=true;state.restVisible=true;state.restExercise=exName||'';
+  clearInterval(state.restInterval);state.restInterval=setInterval(tickRest,1000);renderRest();
+}
+function tickRest(){state.restSeconds--;renderRest();if(state.restSeconds===0){playBell();if(navigator.vibrate)navigator.vibrate([200,100,200,100,200]);}}
+function setRestPreset(s){state.restTarget=s;state.restSeconds=s;state.restRunning=true;clearInterval(state.restInterval);state.restInterval=setInterval(tickRest,1000);renderRest();}
+function toggleRestPause(){if(state.restRunning){state.restRunning=false;clearInterval(state.restInterval);}else{state.restRunning=true;state.restInterval=setInterval(tickRest,1000);}renderRest();}
+function closeRest(){state.restVisible=false;state.restRunning=false;clearInterval(state.restInterval);document.getElementById("restTimer").style.display="none";}
+function renderRest(){
+  const el=document.getElementById("restTimer");el.style.display="flex";
+  const isOver=state.restSeconds<=0,abs=Math.abs(state.restSeconds),m=Math.floor(abs/60),s=abs%60;
+  el.className="rest-timer "+(isOver?"over":"normal");
+  const ps=[60,90,120,180,240];
+  el.innerHTML='<div><div class="rest-label">'+(isOver?'OVER BY':'REST')+'</div><div class="rest-time">'+(isOver?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(state.restExercise?'<div class="rest-exercise">'+state.restExercise+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(state.restTarget===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p<60?p+'s':p===90?'90s':(p/60)+'m')+'</button>').join('')+'<button class="rest-toggle '+(state.restRunning?'pause':'play')+'" onclick="toggleRestPause()">'+(state.restRunning?'⏸':'▶')+'</button><button class="rest-close" onclick="closeRest()">✕</button></div>';
 }
 
-function updateHeader() {
-  const title = state.program.length ? state.program[0]["Day Title"] : "";
-  document.getElementById("weekLabel").textContent = `WEEK ${state.week} — ${WEEK_NAMES[state.week]}`;
-  document.getElementById("dayTitle").textContent = `DAY ${state.day}: ${title}`;
-  const gear = state.program.length ? state.program[0]["Gear"] : "";
-  const badge = document.getElementById("gearBadge");
-  badge.textContent = gear === "MINIMAL" ? "MINIMAL GEAR" : "FULL GYM";
-  badge.className = "gear-badge " + (gear === "MINIMAL" ? "gear-min" : "gear-gym");
+// === DAY NOTES ===
+function onNotesInput(){
+  const ta=document.getElementById('dayNotesText');
+  if(!ta)return;
+  const val=ta.value;
+  // Update count
+  const countEl=document.getElementById('dayNotesCount');
+  if(countEl)countEl.textContent=val.length+' chars';
+  // Update cache immediately
+  const note=getCurrentDayNote();
+  if(note)note.Notes=val;
+  // Debounced save — 1.5s after stop typing
+  clearTimeout(state.notesSaveTimeout);
+  state.notesSaveTimeout=setTimeout(()=>saveDayNotes(val),1500);
 }
-
-function updateProgress() {
-  const total = state.log.length;
-  const done = state.log.filter(l => l["Actual Weight"]).length;
-  const pct = total ? Math.round((done / total) * 100) : 0;
-  document.getElementById("setCount").textContent = `${done}/${total} sets`;
-  document.getElementById("setPct").textContent = `${pct}%`;
-  const fill = document.getElementById("progressFill");
-  fill.style.width = `${pct}%`;
-  fill.className = "progress-fill " + (pct === 100 ? "done" : "active");
+async function saveDayNotes(text){
+  const savedEl=document.getElementById('dayNotesSaved');
+  try{
+    await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},
+      body:JSON.stringify({action:"logDayNotes",week:state.week,day:state.day,date:today(),notes:text})
+    });
+    // Update cache
+    const note=getCurrentDayNote();
+    if(note){note.Notes=text;note.Date=today();}
+    if(savedEl){savedEl.classList.add('show');setTimeout(()=>savedEl.classList.remove('show'),2000);}
+  }catch(e){toast("Failed to save notes");console.error(e);}
 }
-
-// === REST TIMER ===
-function startRestTimer(seconds, exerciseName) {
-  state.restTarget = seconds;
-  state.restSeconds = seconds;
-  state.restRunning = true;
-  state.restVisible = true;
-  state.restExercise = exerciseName || '';
-  clearInterval(state.restInterval);
-  state.restInterval = setInterval(tickRest, 1000);
-  renderRest();
-}
-
-function tickRest() {
-  state.restSeconds--;
-  renderRest();
-  // Vibrate at 0 if supported
-  if (state.restSeconds === 0 && navigator.vibrate) {
-    navigator.vibrate([200, 100, 200]);
-  }
-}
-
-function setRestPreset(s) {
-  state.restTarget = s;
-  state.restSeconds = s;
-  state.restRunning = true;
-  clearInterval(state.restInterval);
-  state.restInterval = setInterval(tickRest, 1000);
-  renderRest();
-}
-
-function toggleRestPause() {
-  if (state.restRunning) {
-    state.restRunning = false;
-    clearInterval(state.restInterval);
-  } else {
-    state.restRunning = true;
-    state.restInterval = setInterval(tickRest, 1000);
-  }
-  renderRest();
-}
-
-function closeRest() {
-  state.restVisible = false; state.restRunning = false;
-  clearInterval(state.restInterval);
-  document.getElementById("restTimer").style.display = "none";
-}
-
-function renderRest() {
-  const el = document.getElementById("restTimer");
-  el.style.display = "flex";
-  const isOver = state.restSeconds <= 0;
-  const abs = Math.abs(state.restSeconds);
-  const m = Math.floor(abs / 60);
-  const s = abs % 60;
-  el.className = "rest-timer " + (isOver ? "over" : "normal");
-
-  const presets = [60, 90, 120, 180, 240];
-  const presetHTML = presets.map(p =>
-    `<button class="rest-preset${state.restTarget === p ? ' active-preset' : ''}" onclick="setRestPreset(${p})">${p < 60 ? p + 's' : (p/60) + 'm'}</button>`
-  ).join('');
-
-  el.innerHTML = `
-    <div>
-      <div class="rest-label">${isOver ? 'OVER BY' : 'REST'}</div>
-      <div class="rest-time">${isOver ? '+' : ''}${m}:${s.toString().padStart(2,'0')}</div>
-      ${state.restExercise ? `<div class="rest-exercise">${state.restExercise}</div>` : ''}
-    </div>
-    <div class="rest-controls">
-      ${presetHTML}
-      <button class="rest-toggle ${state.restRunning ? 'pause' : 'play'}" onclick="toggleRestPause()">${state.restRunning ? '⏸' : '▶'}</button>
-      <button class="rest-close" onclick="closeRest()">✕</button>
-    </div>
-  `;
+function insertPrompt(text){
+  const ta=document.getElementById('dayNotesText');
+  if(!ta)return;
+  const cur=ta.value;
+  const prefix=cur&&!cur.endsWith('\n')&&!cur.endsWith(' ')?'\n':'';
+  ta.value=cur+prefix+text+' ';
+  ta.focus();
+  onNotesInput();
 }
 
 // === RENDER ===
-function render() {
-  updateHeader();
-  updateProgress();
-  const content = document.getElementById("content");
-  content.innerHTML = "";
-
-  const exercises = [];
-  const seen = new Set();
-  state.program.forEach(p => {
-    if (!seen.has(p["Exercise"])) { seen.add(p["Exercise"]); exercises.push(p); }
-  });
-
-  exercises.forEach((ex, i) => {
-    const sets = state.log.filter(l => l["Exercise"] === ex["Exercise"]).sort((a,b) => a["Set #"] - b["Set #"]);
-    const completed = sets.filter(s => s["Actual Weight"]).length;
-    const allDone = completed === sets.length && sets.length > 0;
-    const expanded = state.expandedEx === i;
-    const notes = ex["Notes"] || "";
-
-    const card = document.createElement("div");
-    card.className = "exercise-card" + (expanded ? " expanded" : "");
-
-    const header = document.createElement("div");
-    header.className = "exercise-header";
-    header.onclick = () => { state.expandedEx = state.expandedEx === i ? -1 : i; render(); };
-    header.innerHTML = `
-      <div>
-        <div class="ex-name ${allDone ? 'done' : ''}">${allDone ? '✓ ' : ''}${ex["Exercise"]}</div>
-        <div class="ex-sub">${ex["Target Sets"]}×${ex["Target Reps"] || 'MAX'} — ${notes.substring(0,45)}${notes.length > 45 ? '…' : ''}</div>
-      </div>
-      <div class="ex-count" style="color:${allDone ? 'var(--green)' : completed > 0 ? 'var(--accent)' : 'var(--dim)'}">${completed}/${sets.length}</div>
-    `;
+function render(){
+  updateHeader();updateProgress();
+  const content=document.getElementById("content");content.innerHTML="";
+  const program=getCurrentProgram(),log=getCurrentLog(),metcons=getCurrentMetcons();
+  if(!dataLoaded)return;
+  const exercises=[],seen=new Set();
+  program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
+  if(!exercises.length){content.innerHTML='<div class="loading">No workout for W'+state.week+'D'+state.day+'</div>';return;}
+  exercises.forEach((ex,i)=>{
+    const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
+    const completed=sets.filter(s=>s["Actual Weight"]).length;
+    const allDone=completed===sets.length&&sets.length>0;
+    const expanded=state.expandedEx===i;
+    const notes=ex.Notes||"";
+    const card=document.createElement("div");card.className="exercise-card"+(expanded?" expanded":"");
+    const header=document.createElement("div");header.className="exercise-header";
+    header.onclick=()=>{state.expandedEx=state.expandedEx===i?-1:i;render();};
+    header.innerHTML='<div><div class="ex-name '+(allDone?'done':'')+'">'+(allDone?'✓ ':'')+ex.Exercise+'</div><div class="ex-sub">'+ex["Target Sets"]+'×'+(ex["Target Reps"]||'MAX')+' — '+notes.substring(0,45)+(notes.length>45?'…':'')+'</div></div><div class="ex-count" style="color:'+(allDone?'var(--green)':completed>0?'var(--accent)':'var(--dim)')+'">'+completed+'/'+sets.length+'</div>';
     card.appendChild(header);
-
-    if (expanded) {
-      const area = document.createElement("div");
-      area.className = "sets-area";
-      area.innerHTML = `<div class="set-headers">
-        <div style="width:24px">SET</div>
-        <div style="width:62px;text-align:center">TARGET</div>
-        <div style="width:58px;text-align:center">LBS</div>
-        <div style="width:46px;text-align:center">REPS</div>
-        <div style="width:32px;text-align:center">REST</div>
-        <div style="width:36px"></div>
-      </div>`;
-
-      sets.forEach((s, si) => {
-        const isSaved = !!s["Actual Weight"];
-        const firstEmpty = sets.findIndex(x => !x["Actual Weight"]);
-        const isActive = si === firstEmpty;
-        const tw = s["Target Weight"] || "—";
-        const tr = s["Target Reps"] === "MAX" ? "MAX" : (s["Target Reps"] || "—");
-        const savingKey = `${i}_${si}`;
-        const isSaving = state.saving[savingKey];
-        const restSec = getRestSeconds(ex["Exercise"], s["Target Reps"], state.week);
-
-        const wVal = isSaved ? s["Actual Weight"] : (s["Target Weight"] || "");
-        const rVal = isSaved ? s["Actual Reps"] : (s["Target Reps"] === "MAX" ? "" : (s["Target Reps"] || ""));
-
-        const row = document.createElement("div");
-        row.className = "set-row" + (isSaved ? " saved" : isActive ? " active" : "");
-        row.innerHTML = `
-          <div class="set-num" style="color:${isSaved ? 'var(--green)' : isActive ? 'var(--accent)' : 'var(--dim)'}">${si+1}</div>
-          <div class="set-target">${tw}×${tr}</div>
-          <input type="number" class="set-input ${isSaved ? 'saved' : ''}" id="w_${i}_${si}" value="${wVal}" placeholder="lbs" inputmode="numeric">
-          <input type="number" class="set-input reps ${isSaved ? 'saved' : ''}" id="r_${i}_${si}" value="${rVal}" placeholder="reps" inputmode="numeric">
-          <div class="set-rest-badge">${formatRest(restSec)}</div>
-          <button class="set-log-btn ${isSaved ? 'saved' : ''}" id="btn_${i}_${si}" onclick="toggleSet(${i},${si},${isSaved ? 'true' : 'false'})" ${isSaving ? 'disabled' : ''}>${isSaving ? '…' : isSaved ? '✓' : '→'}</button>
-        `;
+    if(expanded){
+      const area=document.createElement("div");area.className="sets-area";
+      area.innerHTML='<div class="set-headers"><div style="width:24px">SET</div><div style="width:62px;text-align:center">TARGET</div><div style="width:58px;text-align:center">LBS</div><div style="width:46px;text-align:center">REPS</div><div style="width:32px;text-align:center">REST</div><div style="width:36px"></div></div>';
+      sets.forEach((s,si)=>{
+        const isSaved=!!s["Actual Weight"];const firstEmpty=sets.findIndex(x=>!x["Actual Weight"]);const isActive=si===firstEmpty;
+        const tw=s["Target Weight"]||"—";const tr=s["Target Reps"]==="MAX"?"MAX":(s["Target Reps"]||"—");
+        const restSec=getRestSeconds(ex.Exercise,s["Target Reps"],state.week);
+        const wVal=isSaved?s["Actual Weight"]:(s["Target Weight"]||"");
+        const rVal=isSaved?s["Actual Reps"]:(s["Target Reps"]==="MAX"?"":(s["Target Reps"]||""));
+        const row=document.createElement("div");
+        row.className="set-row"+(isSaved?" saved":isActive?" active":"");
+        row.innerHTML='<div class="set-num" style="color:'+(isSaved?'var(--green)':isActive?'var(--accent)':'var(--dim)')+'">'+(si+1)+'</div><div class="set-target">'+tw+'×'+tr+'</div><input type="number" class="set-input '+(isSaved?'saved':'')+'" id="w_'+i+'_'+si+'" value="'+wVal+'" placeholder="lbs" inputmode="numeric"><input type="number" class="set-input reps '+(isSaved?'saved':'')+'" id="r_'+i+'_'+si+'" value="'+rVal+'" placeholder="reps" inputmode="numeric"><div class="set-rest-badge">'+formatRest(restSec)+'</div><button class="set-log-btn '+(isSaved?'saved':'')+'" id="btn_'+i+'_'+si+'" onclick="toggleSet('+i+','+si+','+(isSaved?'true':'false')+')">'+(isSaved?'✓':'→')+'</button>';
         area.appendChild(row);
       });
-
-      if (ex["Exercise"]?.includes("OHP")) {
-        const note = document.createElement("div");
-        note.className = "form-note";
-        note.textContent = "⚠ FORM: Squeeze glutes, brace abs, ribs DOWN. If back arches → too heavy.";
-        area.appendChild(note);
-      }
+      if(ex.Exercise&&ex.Exercise.includes("OHP")){const n=document.createElement("div");n.className="form-note";n.textContent="⚠ FORM: Squeeze glutes, brace abs, ribs DOWN. If back arches → too heavy.";area.appendChild(n);}
       card.appendChild(area);
     }
     content.appendChild(card);
   });
-
   // Metcon
-  if (state.metcons.length) {
-    const m = state.metcons[0];
-    const mc = document.createElement("div");
-    mc.className = "metcon-card";
-    const movements = (m["Movements"] || "").split(" | ").map(x => `<div>• ${x}</div>`).join("");
-    const min = Math.floor(state.metconSeconds / 60);
-    const sec = state.metconSeconds % 60;
-    mc.innerHTML = `
-      <div class="metcon-label">METCON</div>
-      <div class="metcon-name">${m["Metcon Name"]}</div>
-      <div class="metcon-cap">Cap: ${m["Time Cap"]}</div>
-      <div class="metcon-moves">${movements}</div>
-      <div class="metcon-timer-row">
-        <div class="metcon-time ${state.metconRunning ? 'running' : ''}">${min}:${sec.toString().padStart(2,'0')}</div>
-        ${!state.metconFinished ? `
-          <button class="metcon-btn ${state.metconRunning ? 'stop' : 'start'}" onclick="toggleMetcon()">
-            ${state.metconRunning ? 'STOP' : 'START'}
-          </button>
-          ${!state.metconRunning && state.metconSeconds > 0 ? '<button class="metcon-btn finish" onclick="finishMetcon()">FINISH</button>' : ''}
-        ` : ''}
-      </div>
-      ${state.metconFinished ? `
-        <div class="metcon-score-row">
-          <input type="text" class="metcon-score-input" id="metconScore" placeholder="Score / rounds">
-          <button class="metcon-log-btn" onclick="logMetcon()">LOG</button>
-        </div>
-      ` : ''}
-    `;
+  if(metcons.length){
+    const m=metcons[0];const mc=document.createElement("div");mc.className="metcon-card";
+    const movements=(m.Movements||"").split(" | ").map(x=>'<div>• '+x+'</div>').join("");
+    const min=Math.floor(state.metconSeconds/60),sec=state.metconSeconds%60;
+    mc.innerHTML='<div class="metcon-label">METCON</div><div class="metcon-name">'+m["Metcon Name"]+'</div><div class="metcon-cap">Cap: '+m["Time Cap"]+'</div><div class="metcon-moves">'+movements+'</div><div class="metcon-timer-row"><div class="metcon-time '+(state.metconRunning?'running':'')+'">'+min+':'+sec.toString().padStart(2,'0')+'</div>'+(!state.metconFinished?'<button class="metcon-btn '+(state.metconRunning?'stop':'start')+'" onclick="toggleMetcon()">'+(state.metconRunning?'STOP':'START')+'</button>'+(!state.metconRunning&&state.metconSeconds>0?'<button class="metcon-btn finish" onclick="finishMetcon()">FINISH</button>':''):'')+'</div>'+(state.metconFinished?'<div class="metcon-score-row"><input type="text" class="metcon-score-input" id="metconScore" placeholder="Score / rounds"><button class="metcon-log-btn" onclick="logMetcon()">LOG</button></div>':'');
     content.appendChild(mc);
   }
+  // Day Notes
+  const noteData=getCurrentDayNote();
+  const noteText=noteData?noteData.Notes||'':'';
+  const noteDate=noteData&&noteData.Date?noteData.Date:'';
+  const nc=document.createElement("div");nc.className="day-notes-card";
+  nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div><div class="day-notes-saved" id="dayNotesSaved">Saved ✓</div></div>'
+    +'<div class="day-notes-prompts">'
+    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Energy level:\')">⚡ Energy</div>'
+    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Sleep:\')">😴 Sleep</div>'
+    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Body weight:\')">⚖️ Weight</div>'
+    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Pain/tightness:\')">🔴 Pain</div>'
+    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Form notes:\')">📋 Form</div>'
+    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Next session:\')">➡️ Next</div>'
+    +'</div>'
+    +'<textarea class="day-notes-textarea" id="dayNotesText" oninput="onNotesInput()" placeholder="How did the session go? Energy, sleep, bodyweight, anything that felt off, PRs hit, adjustments for next time...">'+noteText.replace(/</g,'&lt;')+'</textarea>'
+    +'<div class="day-notes-meta"><div class="day-notes-date">'+(noteDate?'Last saved: '+noteDate:'')+'</div><div class="day-notes-count" id="dayNotesCount">'+noteText.length+' chars</div></div>';
+  content.appendChild(nc);
 }
-
-// === TOGGLE LOG / UNLOG ===
-async function toggleSet(exIdx, setIdx, currentlySaved) {
-  const savingKey = `${exIdx}_${setIdx}`;
-  if (state.saving[savingKey]) return;
-
-  const exercises = [];
-  const seen = new Set();
-  state.program.forEach(p => { if (!seen.has(p["Exercise"])) { seen.add(p["Exercise"]); exercises.push(p); } });
-  const ex = exercises[exIdx];
-  const sets = state.log.filter(l => l["Exercise"] === ex["Exercise"]).sort((a,b) => a["Set #"] - b["Set #"]);
-  const s = sets[setIdx];
-
-  state.saving[savingKey] = true;
-  render();
-
-  if (currentlySaved) {
-    // UNLOG — clear the set
-    try {
-      await fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify({
-          action: "logSet",
-          week: s["Week"], day: s["Day"],
-          exercise: s["Exercise"], setNum: s["Set #"],
-          date: "",
-          weight: "",
-          reps: "",
-        }),
-      });
-      s["Actual Weight"] = "";
-      s["Actual Reps"] = "";
-      toast("Set cleared ↩", "undo");
-    } catch(e) {
-      toast("Failed to clear — check connection");
-      console.error(e);
-    }
-  } else {
-    // LOG — save the set
-    const w = document.getElementById(`w_${exIdx}_${setIdx}`).value;
-    const r = document.getElementById(`r_${exIdx}_${setIdx}`).value;
-    if (!w && !r) { state.saving[savingKey] = false; render(); return; }
-
-    try {
-      await fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify({
-          action: "logSet",
-          week: s["Week"], day: s["Day"],
-          exercise: s["Exercise"], setNum: s["Set #"],
-          date: today(),
-          weight: Number(w) || 0,
-          reps: Number(r) || 0,
-        }),
-      });
-      s["Actual Weight"] = Number(w) || 0;
-      s["Actual Reps"] = Number(r) || 0;
-      toast("Set logged ✓");
-
-      // Auto-start rest timer with optimal time for this exercise
-      const restSec = getRestSeconds(ex["Exercise"], s["Target Reps"], state.week);
-      startRestTimer(restSec, ex["Exercise"]);
-    } catch(e) {
-      toast("Failed to log — check connection");
-      console.error(e);
-    }
+async function toggleSet(exIdx,setIdx,currentlySaved){
+  const sk=exIdx+'_'+setIdx;if(state.saving[sk])return;
+  const program=getCurrentProgram(),log=getCurrentLog();
+  const exercises=[],seen=new Set();
+  program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
+  const ex=exercises[exIdx];
+  const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
+  const s=sets[setIdx];
+  state.saving[sk]=true;
+  if(currentlySaved){
+    const ow=s["Actual Weight"],or=s["Actual Reps"];
+    s["Actual Weight"]="";s["Actual Reps"]="";render();toast("Set cleared ↩","undo");
+    try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:"",weight:"",reps:""})});}
+    catch(e){s["Actual Weight"]=ow;s["Actual Reps"]=or;render();toast("Failed to clear — restored");console.error(e);}
+  }else{
+    const w=document.getElementById('w_'+exIdx+'_'+setIdx).value;
+    const r=document.getElementById('r_'+exIdx+'_'+setIdx).value;
+    if(!w&&!r){state.saving[sk]=false;return;}
+    s["Actual Weight"]=Number(w)||0;s["Actual Reps"]=Number(r)||0;render();toast("Set logged ✓");
+    const restSec=getRestSeconds(ex.Exercise,s["Target Reps"],state.week);
+    startRestTimer(restSec,ex.Exercise);
+    try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:today(),weight:Number(w)||0,reps:Number(r)||0})});}
+    catch(e){s["Actual Weight"]="";s["Actual Reps"]="";render();toast("Failed — check connection");console.error(e);}
   }
-
-  state.saving[savingKey] = false;
+  state.saving[sk]=false;
+}
+function toggleMetcon(){
+  if(state.metconRunning){state.metconRunning=false;clearInterval(state.metconInterval);}
+  else{state.metconRunning=true;state.metconInterval=setInterval(()=>{state.metconSeconds++;render();},1000);}
   render();
 }
-
-// === METCON ===
-function toggleMetcon() {
-  if (state.metconRunning) {
-    state.metconRunning = false;
-    clearInterval(state.metconInterval);
-  } else {
-    state.metconRunning = true;
-    state.metconInterval = setInterval(() => { state.metconSeconds++; render(); }, 1000);
-  }
-  render();
+function finishMetcon(){state.metconRunning=false;clearInterval(state.metconInterval);state.metconFinished=true;render();}
+async function logMetcon(){
+  const score=document.getElementById("metconScore").value;
+  const min=Math.floor(state.metconSeconds/60),sec=state.metconSeconds%60;
+  toast("Metcon logged ✓");
+  try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"logMetcon",week:state.week,day:state.day,date:today(),time:min+':'+sec.toString().padStart(2,'0'),score})});}
+  catch(e){toast("Failed to log metcon");console.error(e);}
 }
-function finishMetcon() {
-  state.metconRunning = false;
-  clearInterval(state.metconInterval);
-  state.metconFinished = true;
-  render();
+function toggleWorkoutTimer(){
+  const btn=document.getElementById("workoutTimer");
+  if(state.workoutRunning){state.workoutRunning=false;clearInterval(state.workoutInterval);btn.className="ctrl-btn";btn.textContent="START";}
+  else{state.workoutRunning=true;state.workoutElapsed=0;state.workoutInterval=setInterval(()=>{state.workoutElapsed++;const m=Math.floor(state.workoutElapsed/60),s=state.workoutElapsed%60;btn.textContent=m+':'+s.toString().padStart(2,'0');},1000);btn.className="ctrl-btn running";btn.textContent="0:00";}
 }
-async function logMetcon() {
-  const score = document.getElementById("metconScore").value;
-  const min = Math.floor(state.metconSeconds / 60);
-  const sec = state.metconSeconds % 60;
-  try {
-    await fetch(API, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({
-        action: "logMetcon",
-        week: state.week, day: state.day,
-        date: today(),
-        time: `${min}:${sec.toString().padStart(2,'0')}`,
-        score: score,
-      }),
-    });
-    toast("Metcon logged ✓");
-  } catch(e) { toast("Failed to log metcon"); console.error(e); }
-}
-
-// === WORKOUT TIMER ===
-function toggleWorkoutTimer() {
-  const btn = document.getElementById("workoutTimer");
-  if (state.workoutRunning) {
-    state.workoutRunning = false;
-    clearInterval(state.workoutInterval);
-    btn.className = "ctrl-btn";
-    btn.textContent = "START";
-  } else {
-    state.workoutRunning = true; state.workoutElapsed = 0;
-    state.workoutInterval = setInterval(() => {
-      state.workoutElapsed++;
-      const m = Math.floor(state.workoutElapsed / 60);
-      const s = state.workoutElapsed % 60;
-      btn.textContent = `${m}:${s.toString().padStart(2,'0')}`;
-    }, 1000);
-    btn.className = "ctrl-btn running";
-    btn.textContent = "0:00";
-  }
-}
-
-// INIT
-loadWorkout();
+initialLoad();
 </script>
 </body>
 </html>
