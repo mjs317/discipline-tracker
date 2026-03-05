@@ -16,7 +16,7 @@
 <style>
 :root{--accent:#8B0000;--dark:#141414;--card:#1c1c1c;--card-active:#241a1a;--green:#2d6a4f;--green-light:#40916c;--med:#999;--dim:#555;--yellow:#e6c200;--border:rgba(255,255,255,0.06)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:var(--dark);color:#fff;min-height:100dvh;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom,0)}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:var(--dark);color:#fff;min-height:100dvh;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom,0);overscroll-behavior-y:contain}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield}
 button{font-family:inherit}
@@ -47,6 +47,7 @@ button{font-family:inherit}
 .exercise-header{padding:12px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
 .ex-name{font-size:14px;font-weight:700}.ex-name.done{color:var(--green-light)}
 .ex-sub{font-size:11px;color:var(--dim);margin-top:2px}
+.ex-prev{font-size:10px;color:var(--med);margin-top:3px;font-family:'DM Mono',monospace}
 .sets-area{padding:0 10px 12px}
 .set-headers{display:flex;gap:6px;font-size:9px;color:var(--dim);letter-spacing:0.1em;margin-bottom:6px;padding:0 8px}
 .set-row{display:flex;gap:6px;align-items:center;padding:6px 8px;border-radius:8px;margin-bottom:3px;border:1px solid transparent}
@@ -62,6 +63,7 @@ button{font-family:inherit}
 .set-log-btn.saved{background:rgba(45,106,79,0.15);color:var(--green-light)}
 .set-log-btn:active{transform:scale(0.95)}
 .form-note{margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(139,0,0,0.08);font-size:11px;color:var(--yellow);line-height:1.5}
+.e1rm{font-size:10px;color:var(--accent);font-family:'DM Mono',monospace;margin-top:6px;padding:4px 8px}
 .metcon-card{background:var(--card-active);border-radius:12px;margin-bottom:8px;border:1px solid rgba(139,0,0,0.3);padding:16px;overflow:hidden}
 .metcon-label{font-size:10px;color:var(--accent);font-weight:700;letter-spacing:0.1em}
 .metcon-type-badge{display:inline-block;background:rgba(139,0,0,0.3);padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:0.08em;margin-left:8px;color:#fff}
@@ -96,19 +98,29 @@ button{font-family:inherit}
 .emom-progress-fill{height:4px;background:#4dabf7;border-radius:2px;transition:width 0.2s}
 .metcon-score-row{margin-top:12px;display:flex;gap:8px;align-items:center}
 .metcon-score-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:#fff;font-size:14px;font-family:'DM Mono',monospace;outline:none}
-.metcon-log-btn{background:var(--green);border:none;border-radius:8px;color:#fff;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer}
+.countdown-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200}
+.countdown-num{font-size:120px;font-weight:800;font-family:'DM Mono',monospace;color:var(--accent);animation:countPop 0.3s ease-out}
+.countdown-go{font-size:72px;font-weight:800;color:var(--green);animation:countPop 0.3s ease-out}
+.countdown-label{font-size:14px;color:var(--dim);margin-top:12px;letter-spacing:0.15em}
+@keyframes countPop{0%{transform:scale(1.5);opacity:0}100%{transform:scale(1);opacity:1}}
 .day-notes-card{background:var(--card);border-radius:12px;margin-top:12px;border:1px solid var(--border);padding:16px}
 .day-notes-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .day-notes-label{font-size:10px;color:var(--accent);font-weight:700;letter-spacing:0.1em}
 .day-notes-prompts{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .day-notes-prompt{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:4px 8px;font-size:10px;color:var(--dim);cursor:pointer}
-.day-notes-prompt:active{background:rgba(139,0,0,0.15);color:var(--med)}
+.day-notes-prompt:active{background:rgba(139,0,0,0.15)}
 .day-notes-textarea{width:100%;min-height:100px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;color:#fff;font-size:13px;line-height:1.6;font-family:'DM Sans',system-ui,sans-serif;outline:none;resize:vertical}
 .day-notes-textarea:focus{border-color:rgba(139,0,0,0.4)}
 .day-notes-textarea::placeholder{color:rgba(255,255,255,0.15)}
-.day-notes-save-btn{background:var(--green);border:none;border-radius:8px;color:#fff;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;transition:all 0.2s}
+.day-notes-save-btn{background:var(--green);border:none;border-radius:8px;color:#fff;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px}
 .day-notes-save-btn.saved{background:rgba(45,106,79,0.2);color:var(--green-light)}
 .day-notes-save-btn:active{transform:scale(0.96)}
+.summary-card{background:linear-gradient(135deg,#1a2a1a 0%,#1a1a1a 100%);border-radius:12px;margin-top:12px;border:1px solid rgba(45,106,79,0.3);padding:20px;text-align:center}
+.summary-title{font-size:18px;font-weight:800;color:var(--green-light)}
+.summary-stats{display:flex;justify-content:space-around;margin-top:16px}
+.summary-stat{text-align:center}
+.summary-num{font-size:24px;font-weight:800;font-family:'DM Mono',monospace;color:#fff}
+.summary-label{font-size:10px;color:var(--dim);letter-spacing:0.08em;margin-top:2px}
 .rest-timer{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom,12px));display:flex;align-items:center;justify-content:space-between;z-index:100}
 .rest-timer.normal{background:#1a1a2e;border-top:2px solid var(--accent)}
 .rest-timer.over{background:var(--accent);border-top:2px solid #ff4444}
@@ -129,19 +141,23 @@ button{font-family:inherit}
 .skel-bar{height:14px;border-radius:4px;background:rgba(255,255,255,0.04);animation:pulse 1.2s ease-in-out infinite}
 .skel-bar.short{width:45%;margin-top:6px;height:10px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.pull-indicator{text-align:center;padding:8px;font-size:11px;color:var(--dim);transition:all 0.2s}
+.offline-badge{position:fixed;top:8px;right:8px;background:#b85c00;color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;z-index:300;display:none}
 </style>
 </head>
 <body>
+<div id="offlineBadge" class="offline-badge">OFFLINE — QUEUED</div>
 <div id="toast" class="toast"></div>
 <div class="header">
 <div class="header-top"><div><div class="week-label" id="weekLabel">WEEK 1 — DISCIPLINE</div><div class="day-title" id="dayTitle">Loading...</div></div><div class="gear-badge gear-gym" id="gearBadge">—</div></div>
 <div class="nav-grid" id="navGrid"></div>
 <div class="progress-row"><div class="progress-bar-wrap"><div class="progress-info"><span id="setCount">0/0 sets</span><span id="setPct">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div><button class="ctrl-btn" id="workoutTimer" onclick="toggleWorkoutTimer()">START</button></div>
 </div>
+<div id="pullIndicator" class="pull-indicator" style="height:0;overflow:hidden"></div>
 <div class="content" id="content"></div>
 <div class="rest-timer" id="restTimer" style="display:none;"></div>
 <script>
-// === AUDIO ENGINE ===
+// === AUDIO ===
 let audioCtx=null;
 function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();}
 document.addEventListener('touchstart',function(){initAudio();},{once:true});
@@ -149,11 +165,84 @@ document.addEventListener('click',function(){initAudio();},{once:true});
 function playBell(){try{initAudio();const n=audioCtx.currentTime;[830,1245,1660,2075].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime([.4,.25,.15,.1][i],n);g.gain.exponentialRampToValueAtTime(.001,n+1.8);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+1.8);});setTimeout(()=>{const n2=audioCtx.currentTime;[830,1245].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,n2);g.gain.setValueAtTime([.2,.12][i],n2);g.gain.exponentialRampToValueAtTime(.001,n2+1.2);o.connect(g);g.connect(audioCtx.destination);o.start(n2);o.stop(n2+1.2);});},350);}catch(e){}}
 function playBeep(){try{initAudio();const n=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(1000,n);g.gain.setValueAtTime(.3,n);g.gain.exponentialRampToValueAtTime(.001,n+.2);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+.2);}catch(e){}}
 function playCountdown(){try{initAudio();const n=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='square';o.frequency.setValueAtTime(600,n);g.gain.setValueAtTime(.15,n);g.gain.exponentialRampToValueAtTime(.001,n+.15);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+.15);}catch(e){}}
+function haptic(ms){try{navigator.vibrate(ms||10);}catch(e){}}
 
 const API="https://script.google.com/macros/s/AKfycbyPUKfdLB-GmOu3rv4yH9m5hk1ZoedhYv4MHAB9F1ukfxNtDYlaZN_JA9z5MKWEe81D/exec";
 const WEEK_NAMES={1:"DISCIPLINE",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"};
 const DAY_MAP={1:"D1",2:"D2",3:"D3",4:"D4"};
 let allProgram=null,allLog=null,allMetcons=null,allDayNotes=null,dataLoaded=false;
+
+// === WAKE LOCK ===
+let wakeLock=null;
+async function acquireWakeLock(){try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}catch(e){}}
+function releaseWakeLock(){if(wakeLock){wakeLock.release();wakeLock=null;}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(state.workoutRunning||state.mcRunning))acquireWakeLock();});
+
+// === OFFLINE WRITE QUEUE ===
+let writeQueue=[];
+async function apiWrite(data){
+  try{
+    const res=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(data)});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    document.getElementById('offlineBadge').style.display='none';
+    // Flush queue
+    if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)});}catch(e2){writeQueue.push(d);}}}
+    return true;
+  }catch(e){
+    writeQueue.push(data);
+    document.getElementById('offlineBadge').style.display='block';
+    return false;
+  }
+}
+// Retry queue periodically
+setInterval(async()=>{if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)});}catch(e){writeQueue.push(d);}}if(writeQueue.length===0)document.getElementById('offlineBadge').style.display='none';}},15000);
+
+// === BACKGROUND-SAFE TIMESTAMP TIMERS ===
+// Instead of counting via setInterval, store start timestamps and compute elapsed
+let timers={
+  workout:{running:false,startedAt:0,pausedElapsed:0},
+  rest:{running:false,startedAt:0,pausedElapsed:0,target:120,exercise:''},
+  metcon:{running:false,startedAt:0,pausedElapsed:0},
+};
+function getElapsed(t){if(!t.running)return t.pausedElapsed;return t.pausedElapsed+(Date.now()-t.startedAt);}
+function startTimer(name){const t=timers[name];t.startedAt=Date.now();t.running=true;}
+function pauseTimer(name){const t=timers[name];if(t.running){t.pausedElapsed+=(Date.now()-t.startedAt);t.running=false;}}
+function resetTimer(name){timers[name]={running:false,startedAt:0,pausedElapsed:0,target:timers[name].target||0,exercise:timers[name].exercise||''};}
+
+// Visibility change: recalc all timers
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateAllTimerDisplays();}});
+// Single requestAnimationFrame loop for all timers
+let lastTick=0;
+function timerLoop(now){
+  if(now-lastTick>=250){lastTick=now;updateAllTimerDisplays();}
+  requestAnimationFrame(timerLoop);
+}
+requestAnimationFrame(timerLoop);
+
+function updateAllTimerDisplays(){
+  // Workout timer
+  if(timers.workout.running){
+    const el=Math.floor(getElapsed(timers.workout)/1000);
+    const btn=document.getElementById("workoutTimer");
+    if(btn){const m=Math.floor(el/60),s=el%60;btn.textContent=m+':'+s.toString().padStart(2,'0');}
+  }
+  // Rest timer
+  if(timers.rest.running||timers.rest.pausedElapsed>0){
+    const elapsed=Math.floor(getElapsed(timers.rest)/1000);
+    const remaining=timers.rest.target-elapsed;
+    // Bell at zero (check within window)
+    if(remaining<=0&&remaining>-1&&timers.rest.running&&!timers.rest._belled){playBell();haptic([200,100,200,100,200]);timers.rest._belled=true;}
+    if(state.restVisible)renderRestDisplay(remaining);
+  }
+  // Metcon timer
+  if(timers.metcon.running){
+    const el=Math.floor(getElapsed(timers.metcon)/1000);
+    if(el!==state._lastMcSec){
+      state._lastMcSec=el;
+      onMetconTick(el);
+    }
+  }
+}
 
 // === REST TIME ENGINE ===
 const HC=['Back Squat','Bench Press','Deadlift'];
@@ -164,7 +253,25 @@ function getRestSec(ex,reps,wk){const n=ex||'',r=parseInt(reps)||0;if(wk===4)ret
 function fmtRest(s){const m=Math.floor(s/60),sc=s%60;if(m>0&&sc>0)return m+':'+sc.toString().padStart(2,'0');if(m>0)return m+'m';return s+'s';}
 function fmtTime(s){const neg=s<0;const a=Math.abs(s);const m=Math.floor(a/60);const sc=a%60;return(neg?'+':'')+m+':'+sc.toString().padStart(2,'0');}
 
-// === METCON TYPE DETECTION ===
+// === ESTIMATED 1RM (Epley) ===
+function est1RM(weight,reps){if(!weight||!reps||reps<=0)return 0;if(reps===1)return weight;return Math.round(weight*(1+reps/30));}
+
+// === PREVIOUS PERFORMANCE ===
+function getPrevPerf(exerciseName,currentWeek){
+  if(!allLog||currentWeek<=1)return null;
+  const prev=allLog.filter(r=>r.Exercise===exerciseName&&r.Week==currentWeek-1&&r["Actual Weight"]);
+  if(!prev.length)return null;
+  return prev.sort((a,b)=>a["Set #"]-b["Set #"]).map(s=>s["Actual Weight"]+'x'+s["Actual Reps"]).join(', ');
+}
+function getBest1RM(exerciseName){
+  if(!allLog)return 0;
+  const sets=allLog.filter(r=>r.Exercise===exerciseName&&r["Actual Weight"]&&r["Actual Reps"]);
+  let best=0;
+  sets.forEach(s=>{const e=est1RM(Number(s["Actual Weight"]),Number(s["Actual Reps"]));if(e>best)best=e;});
+  return best;
+}
+
+// === METCON CONFIG ===
 function getMetconConfig(metcon){
   const name=(metcon["Metcon Name"]||'').toLowerCase();
   const capStr=metcon["Time Cap"]||'';
@@ -176,23 +283,18 @@ function getMetconConfig(metcon){
   if(name.includes('amrap'))type='amrap';
   else if(name.includes('emom'))type='emom';
   else if(name.includes('nft')||name.includes('for quality')||name.includes('easy')||name.includes('active recovery')||name.includes('cool down'))type='nft';
-  // Parse EMOM movements
   let emomMoves=null;
   const movStr=metcon["Movements"]||'';
   const minParts=movStr.match(/Min\d+:\s*[^|]+/gi);
-  if(minParts){emomMoves=minParts.map(m=>{const p=m.match(/Min(\d+):\s*(.+)/i);return{min:parseInt(p[1]),move:p[2].trim().replace(/\(x\d+\)/,'').trim()};});}
+  if(minParts){emomMoves=minParts.map(m=>{const p=m.match(/Min(\d+):\s*(.+)/i);return p?{min:parseInt(p[1]),move:p[2].trim().replace(/\(x\d+\)/,'').trim()}:null;}).filter(Boolean);}
   else{const oddM=movStr.match(/Odd:\s*([^|]+)/i);const evenM=movStr.match(/Even:\s*([^|]+)/i);if(oddM&&evenM)emomMoves=[{min:1,move:oddM[1].trim()},{min:2,move:evenM[1].trim()}];}
   return{type,capSec,expectedRounds,emomMoves};
 }
 
-let state={week:1,day:1,expandedEx:0,
-  workoutRunning:false,workoutElapsed:0,workoutInterval:null,
-  restRunning:false,restSeconds:120,restTarget:120,restInterval:null,restVisible:false,restExercise:'',
-  // Metcon state
-  mcType:'fortime',mcRunning:false,mcSeconds:0,mcInterval:null,mcFinished:false,
-  mcCapSec:0,mcExpectedRounds:0,mcSplits:[],mcRoundCount:0,mcReps:'',mcEmomMoves:null,
-  saving:{}
-};
+let state={week:1,day:1,expandedEx:0,workoutRunning:false,restVisible:false,
+  mcType:'fortime',mcRunning:false,mcFinished:false,mcCapSec:0,mcExpectedRounds:0,
+  mcSplits:[],mcRoundCount:0,mcEmomMoves:null,mcCountdown:0,mcCountdownActive:false,
+  _lastMcSec:-1,saving:{}};
 
 function today(){return new Date().toISOString().split("T")[0];}
 function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type==='undo'?' undo':'');clearTimeout(t._to);t._to=setTimeout(()=>t.className="toast",2000);}
@@ -201,13 +303,11 @@ function gl(){return allLog?allLog.filter(r=>r.Week==state.week&&r.Day==state.da
 function gm(){return allMetcons?allMetcons.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
 function gn(){return allDayNotes?allDayNotes.find(r=>r.Week==state.week&&r.Day==state.day)||null:null;}
 
-// === NAV ===
 function buildNav(){const g=document.getElementById("navGrid");g.innerHTML="";for(let w=1;w<=4;w++){const c=document.createElement("div");c.className="nav-week";const wb=document.createElement("button");wb.className="nav-week-btn"+(state.week===w?" active":"");wb.textContent="W"+w;wb.onclick=()=>{state.week=w;state.day=1;switchDay();};c.appendChild(wb);const ds=document.createElement("div");ds.className="nav-days";for(let d=1;d<=4;d++){const db=document.createElement("button");db.className="nav-day-btn"+(state.week===w&&state.day===d?" active":"");db.textContent=DAY_MAP[d];db.onclick=()=>{state.week=w;state.day=d;switchDay();};ds.appendChild(db);}c.appendChild(ds);g.appendChild(c);}}
 
-function switchDay(){state.expandedEx=0;resetMetcon();state.saving={};buildNav();render();}
-function resetMetcon(){state.mcRunning=false;state.mcSeconds=0;clearInterval(state.mcInterval);state.mcFinished=false;state.mcSplits=[];state.mcRoundCount=0;state.mcReps='';}
+function switchDay(){state.expandedEx=0;resetMetconState();state.saving={};buildNav();render();}
+function resetMetconState(){state.mcRunning=false;state.mcFinished=false;state.mcSplits=[];state.mcRoundCount=0;state.mcCountdownActive=false;state._lastMcSec=-1;pauseTimer('metcon');resetTimer('metcon');}
 
-// === LOAD ===
 async function initialLoad(){
   document.getElementById("content").innerHTML='<div class="skel"><div class="skel-bar" style="width:65%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:50%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:70%"></div><div class="skel-bar short"></div></div>';
   buildNav();
@@ -220,110 +320,84 @@ function updateHeader(){const p=gp(),title=p.length?p[0]["Day Title"]:"";documen
 function updateProgress(){const log=gl(),total=log.length,done=log.filter(l=>l["Actual Weight"]).length,pct=total?Math.round(done/total*100):0;document.getElementById("setCount").textContent=done+"/"+total+" sets";document.getElementById("setPct").textContent=pct+"%";const f=document.getElementById("progressFill");f.style.width=pct+"%";f.className="progress-fill "+(pct===100?"done":"active");}
 
 // === REST TIMER ===
-function startRest(sec,exName){state.restTarget=sec;state.restSeconds=sec;state.restRunning=true;state.restVisible=true;state.restExercise=exName||'';clearInterval(state.restInterval);state.restInterval=setInterval(tickRest,1000);renderRest();}
-function tickRest(){state.restSeconds--;renderRest();if(state.restSeconds===0){playBell();if(navigator.vibrate)navigator.vibrate([200,100,200,100,200]);}}
-function setRestPreset(s){state.restTarget=s;state.restSeconds=s;state.restRunning=true;clearInterval(state.restInterval);state.restInterval=setInterval(tickRest,1000);renderRest();}
-function toggleRestPause(){if(state.restRunning){state.restRunning=false;clearInterval(state.restInterval);}else{state.restRunning=true;state.restInterval=setInterval(tickRest,1000);}renderRest();}
-function closeRest(){state.restVisible=false;state.restRunning=false;clearInterval(state.restInterval);document.getElementById("restTimer").style.display="none";}
-function renderRest(){const el=document.getElementById("restTimer");el.style.display="flex";const ov=state.restSeconds<=0,a=Math.abs(state.restSeconds),m=Math.floor(a/60),s=a%60;el.className="rest-timer "+(ov?"over":"normal");const ps=[60,90,120,180,240];el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time">'+(ov?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(state.restExercise?'<div class="rest-exercise">'+state.restExercise+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(state.restTarget===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button class="rest-toggle '+(state.restRunning?'pause':'play')+'" onclick="toggleRestPause()">'+(state.restRunning?'\u23F8':'\u25B6')+'</button><button class="rest-close" onclick="closeRest()">\u2715</button></div>';}
+function startRestFn(sec,exName){timers.rest.target=sec;timers.rest.exercise=exName||'';timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');state.restVisible=true;}
+function renderRestDisplay(remaining){
+  const el=document.getElementById("restTimer");if(!el)return;el.style.display="flex";
+  const ov=remaining<=0,a=Math.abs(remaining),m=Math.floor(a/60),s=a%60;
+  el.className="rest-timer "+(ov?"over":"normal");
+  const ps=[60,90,120,180,240];
+  el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time">'+(ov?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(timers.rest.exercise?'<div class="rest-exercise">'+timers.rest.exercise+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(timers.rest.target===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button class="rest-toggle '+(timers.rest.running?'pause':'play')+'" onclick="toggleRestPause()">'+(timers.rest.running?'\u23F8':'\u25B6')+'</button><button class="rest-close" onclick="closeRest()">\u2715</button></div>';
+}
+function setRestPreset(s){timers.rest.target=s;timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');}
+function toggleRestPause(){if(timers.rest.running)pauseTimer('rest');else startTimer('rest');}
+function closeRest(){state.restVisible=false;pauseTimer('rest');resetTimer('rest');timers.rest.target=120;document.getElementById("restTimer").style.display="none";}
 
-// === METCON TIMER ===
-function startMetcon(){
-  if(state.mcRunning)return;
-  state.mcRunning=true;
-  state.mcInterval=setInterval(tickMetcon,1000);
-  updateMetconDisplay();
-}
-function stopMetcon(){state.mcRunning=false;clearInterval(state.mcInterval);updateMetconDisplay();}
-function tickMetcon(){
-  state.mcSeconds++;
-  // AMRAP: check if time is up
-  if(state.mcType==='amrap'&&state.mcSeconds>=state.mcCapSec){
-    state.mcRunning=false;clearInterval(state.mcInterval);state.mcFinished=true;
-    playBell();if(navigator.vibrate)navigator.vibrate([200,100,200,100,200]);
-    render();return;
-  }
-  // EMOM: beep at minute boundaries
-  if(state.mcType==='emom'&&state.mcSeconds>0&&state.mcSeconds%60===0){
-    playBeep();if(navigator.vibrate)navigator.vibrate([100]);
-    // Check if done
-    if(state.mcCapSec>0&&state.mcSeconds>=state.mcCapSec){
-      state.mcRunning=false;clearInterval(state.mcInterval);state.mcFinished=true;
-      playBell();render();return;
+// === METCON COUNTDOWN + TIMER ===
+function beginMetconCountdown(){
+  state.mcCountdownActive=true;state.mcCountdown=10;
+  const overlay=document.createElement('div');overlay.className='countdown-overlay';overlay.id='countdownOverlay';
+  overlay.innerHTML='<div class="countdown-num" id="cdNum">10</div><div class="countdown-label">GET READY</div>';
+  document.body.appendChild(overlay);
+  const cdInterval=setInterval(()=>{
+    state.mcCountdown--;
+    const el=document.getElementById('cdNum');
+    if(state.mcCountdown>0){
+      if(el){el.textContent=state.mcCountdown;el.style.animation='none';el.offsetHeight;el.style.animation='countPop 0.3s ease-out';}
+      if(state.mcCountdown<=3)playCountdown();
+    }else{
+      clearInterval(cdInterval);
+      if(el){el.textContent='GO!';el.className='countdown-go';el.style.animation='none';el.offsetHeight;el.style.animation='countPop 0.3s ease-out';}
+      playBell();haptic([100,50,100,50,200]);
+      setTimeout(()=>{const ov=document.getElementById('countdownOverlay');if(ov)ov.remove();state.mcCountdownActive=false;actualStartMetcon();},800);
     }
-  }
-  // EMOM: 3-2-1 countdown beeps
-  if(state.mcType==='emom'){const secInMin=state.mcSeconds%60;if(secInMin>=57&&secInMin<60)playCountdown();}
-  updateMetconDisplay();
+  },1000);
 }
-function recordRound(){
-  state.mcSplits.push(state.mcSeconds);
-  playBeep();
-  // Auto-finish if all expected rounds done
-  if(state.mcExpectedRounds>0&&state.mcSplits.length>=state.mcExpectedRounds){
-    state.mcRunning=false;clearInterval(state.mcInterval);state.mcFinished=true;
-    playBell();render();return;
-  }
-  updateMetconDisplay();
+function actualStartMetcon(){
+  state.mcRunning=true;state._lastMcSec=-1;
+  resetTimer('metcon');startTimer('metcon');
+  acquireWakeLock();render();
 }
-function finishMetcon(){state.mcRunning=false;clearInterval(state.mcInterval);state.mcFinished=true;render();}
-function updateMetconDisplay(){
-  const el=document.getElementById('mcTimerNum');
-  if(!el)return;
-  if(state.mcType==='amrap'){
-    const remaining=state.mcCapSec-state.mcSeconds;
-    el.textContent=fmtTime(Math.max(0,remaining));
-    if(remaining<=0)el.textContent='0:00';
-  }else if(state.mcType==='emom'){
-    const secInMin=state.mcSeconds%60;
-    const remaining=60-secInMin;
-    const currentMin=Math.floor(state.mcSeconds/60)+1;
-    const totalMin=Math.ceil(state.mcCapSec/60);
-    el.textContent=fmtTime(remaining===60?60:remaining);
-    const minEl=document.getElementById('emomMinLabel');
-    if(minEl)minEl.textContent='MINUTE '+Math.min(currentMin,totalMin)+' OF '+totalMin;
-    const moveEl=document.getElementById('emomMoveLabel');
-    if(moveEl&&state.mcEmomMoves){
-      const idx=(currentMin-1)%state.mcEmomMoves.length;
-      moveEl.textContent=state.mcEmomMoves[idx].move;
-    }
-    const progEl=document.getElementById('emomProgFill');
-    if(progEl)progEl.style.width=((secInMin/60)*100)+'%';
-  }else{
-    el.textContent=fmtTime(state.mcSeconds);
+function onMetconTick(elapsedSec){
+  // AMRAP: done?
+  if(state.mcType==='amrap'&&elapsedSec>=state.mcCapSec){
+    state.mcRunning=false;pauseTimer('metcon');state.mcFinished=true;
+    playBell();haptic([200,100,200,100,200]);render();return;
   }
-  // Update splits display for fortime
-  const splitsEl=document.getElementById('mcSplitsArea');
-  if(splitsEl&&state.mcType==='fortime'&&state.mcSplits.length>0){
-    splitsEl.innerHTML=state.mcSplits.map((t,i)=>{
-      const prev=i>0?state.mcSplits[i-1]:0;
-      const delta=t-prev;
-      return '<div class="split-row"><span class="split-round">R'+(i+1)+'</span><span class="split-time">'+fmtTime(t)+'</span><span class="split-delta">('+fmtTime(delta)+')</span></div>';
-    }).join('');
+  // EMOM: beep + check done
+  if(state.mcType==='emom'&&elapsedSec>0){
+    if(elapsedSec%60===0){playBeep();haptic(100);if(state.mcCapSec>0&&elapsedSec>=state.mcCapSec){state.mcRunning=false;pauseTimer('metcon');state.mcFinished=true;playBell();render();return;}}
+    const secInMin=elapsedSec%60;if(secInMin>=57)playCountdown();
   }
-  // Update round counter display for fortime
-  const rcEl=document.getElementById('mcRoundCounter');
-  if(rcEl&&state.mcType==='fortime'){
-    rcEl.textContent=state.mcSplits.length+(state.mcExpectedRounds>0?'/'+state.mcExpectedRounds:'');
-  }
+  // Update display without full re-render
+  const el=document.getElementById('mcTimerNum');if(!el)return;
+  if(state.mcType==='amrap'){const rem=Math.max(0,state.mcCapSec-elapsedSec);el.textContent=fmtTime(rem);}
+  else if(state.mcType==='emom'){const secInMin=elapsedSec%60;const rem=60-secInMin;el.textContent=fmtTime(rem===60?60:rem);
+    const curMin=Math.floor(elapsedSec/60)+1,totMin=Math.ceil(state.mcCapSec/60);
+    const ml=document.getElementById('emomMinLabel');if(ml)ml.textContent='MINUTE '+Math.min(curMin,totMin)+' OF '+totMin;
+    const mvl=document.getElementById('emomMoveLabel');if(mvl&&state.mcEmomMoves){const idx=(curMin-1)%state.mcEmomMoves.length;mvl.textContent=state.mcEmomMoves[idx].move;}
+    const pg=document.getElementById('emomProgFill');if(pg)pg.style.width=((secInMin/60)*100)+'%';
+  }else{el.textContent=fmtTime(elapsedSec);}
 }
+function recordRound(){const elSec=Math.floor(getElapsed(timers.metcon)/1000);state.mcSplits.push(elSec);haptic(50);playBeep();
+  if(state.mcExpectedRounds>0&&state.mcSplits.length>=state.mcExpectedRounds){state.mcRunning=false;pauseTimer('metcon');state.mcFinished=true;playBell();render();return;}
+  // Update splits display inline
+  const sa=document.getElementById('mcSplitsArea'),rc=document.getElementById('mcRoundCounter');
+  if(sa){const i=state.mcSplits.length-1;const t=state.mcSplits[i];const p=i>0?state.mcSplits[i-1]:0;const d=t-p;sa.innerHTML+=`<div class="split-row"><span class="split-round">R${i+1}</span><span class="split-time">${fmtTime(t)}</span><span class="split-delta">(${fmtTime(d)})</span></div>`;}
+  if(rc)rc.textContent=state.mcSplits.length+(state.mcExpectedRounds>0?'/'+state.mcExpectedRounds:'');
+}
+function pauseMetcon(){state.mcRunning=false;pauseTimer('metcon');render();}
+function resumeMetcon(){state.mcRunning=true;startTimer('metcon');render();}
+function finishMetcon(){state.mcRunning=false;pauseTimer('metcon');state.mcFinished=true;render();}
 async function logMetconResult(){
-  const scoreEl=document.getElementById("mcScore");
-  let score='',time=fmtTime(state.mcSeconds),notes='';
-  if(state.mcType==='fortime'){
-    score=state.mcSplits.length+' rounds';
-    notes=state.mcSplits.map((t,i)=>{const p=i>0?state.mcSplits[i-1]:0;return 'R'+(i+1)+': '+fmtTime(t-p);}).join(' | ');
-  }else if(state.mcType==='amrap'){
-    const reps=document.getElementById('amrapRepsInput');
-    score=state.mcRoundCount+' rds'+(reps&&reps.value?' + '+reps.value+' reps':'');
-    time=fmtTime(state.mcCapSec);
-  }else if(state.mcType==='emom'){
-    score='Completed';time=fmtTime(state.mcCapSec);
-  }else{
-    score=scoreEl?scoreEl.value:'Completed';
-  }
-  toast("Metcon logged \u2713");
-  try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"logMetcon",week:state.week,day:state.day,date:today(),time:time,score:score,notes:notes})});}catch(e){toast("Failed to log metcon");}
+  let score='',time='',notes='';
+  const elSec=Math.floor(getElapsed(timers.metcon)/1000);
+  time=fmtTime(elSec);
+  if(state.mcType==='fortime'){score=state.mcSplits.length+' rounds';notes=state.mcSplits.map((t,i)=>{const p=i>0?state.mcSplits[i-1]:0;return'R'+(i+1)+': '+fmtTime(t-p);}).join(' | ');}
+  else if(state.mcType==='amrap'){const reps=document.getElementById('amrapRepsInput');score=state.mcRoundCount+' rds'+(reps&&reps.value?' + '+reps.value+' reps':'');time=fmtTime(state.mcCapSec);}
+  else if(state.mcType==='emom'){score='Completed';time=fmtTime(state.mcCapSec);}
+  else{const sc=document.getElementById('mcScore');score=sc?sc.value:'Completed';}
+  haptic(30);toast("Metcon logged \u2713");
+  await apiWrite({action:"logMetcon",week:state.week,day:state.day,date:today(),time:time,score:score,notes:notes});
 }
 
 // === RENDER ===
@@ -336,17 +410,20 @@ function render(){
   program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
   if(!exercises.length){content.innerHTML='<div class="loading">No workout for W'+state.week+'D'+state.day+'</div>';return;}
 
-  // Exercises
   exercises.forEach((ex,i)=>{
     const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
     const completed=sets.filter(s=>s["Actual Weight"]).length;
     const allDone=completed===sets.length&&sets.length>0;
     const expanded=state.expandedEx===i;
     const notes=ex.Notes||"";
+    const prevPerf=getPrevPerf(ex.Exercise,state.week);
     const card=document.createElement("div");card.className="exercise-card"+(expanded?" expanded":"");
     const header=document.createElement("div");header.className="exercise-header";
     header.onclick=()=>{state.expandedEx=state.expandedEx===i?-1:i;render();};
-    header.innerHTML='<div><div class="ex-name '+(allDone?'done':'')+'">'+(allDone?'\u2713 ':'')+ex.Exercise+'</div><div class="ex-sub">'+ex["Target Sets"]+'\u00D7'+(ex["Target Reps"]||'MAX')+' \u2014 '+notes.substring(0,45)+(notes.length>45?'\u2026':'')+'</div></div><div class="ex-count" style="color:'+(allDone?'var(--green)':completed>0?'var(--accent)':'var(--dim)')+'">'+completed+'/'+sets.length+'</div>';
+    let headerHTML='<div><div class="ex-name '+(allDone?'done':'')+'">'+(allDone?'\u2713 ':'')+ex.Exercise+'</div><div class="ex-sub">'+ex["Target Sets"]+'\u00D7'+(ex["Target Reps"]||'MAX')+' \u2014 '+notes.substring(0,45)+(notes.length>45?'\u2026':'')+'</div>';
+    if(prevPerf)headerHTML+='<div class="ex-prev">Last: '+prevPerf+'</div>';
+    headerHTML+='</div><div class="ex-count" style="color:'+(allDone?'var(--green)':completed>0?'var(--accent)':'var(--dim)')+'">'+completed+'/'+sets.length+'</div>';
+    header.innerHTML=headerHTML;
     card.appendChild(header);
     if(expanded){
       const area=document.createElement("div");area.className="sets-area";
@@ -355,7 +432,6 @@ function render(){
         const isSaved=!!s["Actual Weight"];const firstEmpty=sets.findIndex(x=>!x["Actual Weight"]);const isActive=si===firstEmpty;
         const tw=s["Target Weight"]||"\u2014";const tr=s["Target Reps"]==="MAX"?"MAX":(s["Target Reps"]||"\u2014");
         const restSec=getRestSec(ex.Exercise,s["Target Reps"],state.week);
-        // KEY FIX: saved shows actual, unsaved shows BLANK (not target)
         const wVal=isSaved?s["Actual Weight"]:'';
         const rVal=isSaved?s["Actual Reps"]:'';
         const row=document.createElement("div");
@@ -363,6 +439,11 @@ function render(){
         row.innerHTML='<div class="set-num" style="color:'+(isSaved?'var(--green)':isActive?'var(--accent)':'var(--dim)')+'">'+(si+1)+'</div><div class="set-target">'+tw+'\u00D7'+tr+'</div><input type="number" class="set-input '+(isSaved?'saved':'')+'" id="w_'+i+'_'+si+'" value="'+wVal+'" placeholder="'+(s["Target Weight"]||'lbs')+'" inputmode="numeric"><input type="number" class="set-input reps '+(isSaved?'saved':'')+'" id="r_'+i+'_'+si+'" value="'+rVal+'" placeholder="'+(s["Target Reps"]||'reps')+'" inputmode="numeric"><div class="set-rest-badge">'+fmtRest(restSec)+'</div><button class="set-log-btn '+(isSaved?'saved':'')+'" onclick="toggleSet('+i+','+si+','+(isSaved?'true':'false')+')">'+(isSaved?'\u2713':'\u2192')+'</button>';
         area.appendChild(row);
       });
+      // Est 1RM for big lifts
+      const best=getBest1RM(ex.Exercise);
+      if(best>0&&HC.concat(['Strict OHP','Weighted Pull-Ups','Weighted Dips']).some(c=>ex.Exercise.includes(c))){
+        const e1=document.createElement('div');e1.className='e1rm';e1.textContent='Est. 1RM: '+best+' lbs';area.appendChild(e1);
+      }
       if(ex.Exercise&&ex.Exercise.includes("OHP")){const n=document.createElement("div");n.className="form-note";n.textContent="\u26A0 FORM: Squeeze glutes, brace abs, ribs DOWN. If back arches \u2192 too heavy.";area.appendChild(n);}
       card.appendChild(area);
     }
@@ -371,148 +452,135 @@ function render(){
 
   // === METCON ===
   if(metcons.length){
-    const m=metcons[0];
-    const cfg=getMetconConfig(m);
-    if(!state.mcRunning&&!state.mcFinished&&state.mcSeconds===0){
+    const m=metcons[0];const cfg=getMetconConfig(m);
+    if(!state.mcRunning&&!state.mcFinished&&getElapsed(timers.metcon)===0){
       state.mcType=cfg.type;state.mcCapSec=cfg.capSec;state.mcExpectedRounds=cfg.expectedRounds;state.mcEmomMoves=cfg.emomMoves;
     }
     const mc=document.createElement("div");mc.className="metcon-card";
     const movements=(m.Movements||"").split(" | ").map(x=>'<div>\u2022 '+x+'</div>').join("");
     const typeLabels={fortime:'FOR TIME',amrap:'AMRAP',emom:'EMOM',nft:'FOR QUALITY'};
+    const elSec=Math.floor(getElapsed(timers.metcon)/1000);
     let timerClass=state.mcRunning?'running':'';
     if(state.mcType==='amrap')timerClass+=' amrap';
     if(state.mcType==='emom')timerClass+=' emom';
-
     let timerVal='0:00';
-    if(state.mcType==='amrap')timerVal=fmtTime(Math.max(0,state.mcCapSec-state.mcSeconds));
-    else timerVal=fmtTime(state.mcSeconds);
+    if(state.mcType==='amrap')timerVal=fmtTime(Math.max(0,state.mcCapSec-elSec));
+    else if(state.mcType==='emom'){const secInMin=elSec%60;timerVal=fmtTime(elSec===0?state.mcCapSec>0?60:0:60-secInMin);}
+    else timerVal=fmtTime(elSec);
 
-    let html='<div class="metcon-label">METCON<span class="metcon-type-badge">'+typeLabels[state.mcType]+'</span></div>';
-    html+='<div class="metcon-name">'+m["Metcon Name"]+'</div>';
-    html+='<div class="metcon-cap">Cap: '+m["Time Cap"]+'</div>';
-    html+='<div class="metcon-moves">'+movements+'</div>';
-
-    // EMOM: show current minute + movement
+    let h='<div class="metcon-label">METCON<span class="metcon-type-badge">'+typeLabels[state.mcType]+'</span></div>';
+    h+='<div class="metcon-name">'+m["Metcon Name"]+'</div>';
+    h+='<div class="metcon-cap">Cap: '+m["Time Cap"]+'</div>';
+    h+='<div class="metcon-moves">'+movements+'</div>';
     if(state.mcType==='emom'&&state.mcRunning){
-      const currentMin=Math.floor(state.mcSeconds/60)+1;
-      const totalMin=Math.ceil(state.mcCapSec/60);
-      let curMove='';
-      if(state.mcEmomMoves){const idx=(currentMin-1)%state.mcEmomMoves.length;curMove=state.mcEmomMoves[idx].move;}
-      html+='<div class="emom-current"><div class="emom-minute" id="emomMinLabel">MINUTE '+Math.min(currentMin,totalMin)+' OF '+totalMin+'</div>';
-      if(curMove)html+='<div class="emom-movement" id="emomMoveLabel">'+curMove+'</div>';
-      html+='</div><div class="emom-progress"><div class="emom-progress-fill" id="emomProgFill" style="width:'+((state.mcSeconds%60)/60*100)+'%"></div></div>';
+      const curMin=Math.floor(elSec/60)+1,totMin=Math.ceil(state.mcCapSec/60);
+      let curMove='';if(state.mcEmomMoves){const idx=(curMin-1)%state.mcEmomMoves.length;curMove=state.mcEmomMoves[idx].move;}
+      h+='<div class="emom-current"><div class="emom-minute" id="emomMinLabel">MINUTE '+Math.min(curMin,totMin)+' OF '+totMin+'</div>';
+      if(curMove)h+='<div class="emom-movement" id="emomMoveLabel">'+curMove+'</div>';
+      h+='</div><div class="emom-progress"><div class="emom-progress-fill" id="emomProgFill" style="width:'+((elSec%60)/60*100)+'%"></div></div>';
     }
-
-    html+='<div class="metcon-timer-display '+timerClass+'" id="mcTimerNum">'+timerVal+'</div>';
-
-    // Controls by type
+    h+='<div class="metcon-timer-display '+timerClass+'" id="mcTimerNum">'+timerVal+'</div>';
     if(!state.mcFinished){
-      html+='<div class="metcon-controls">';
-      if(!state.mcRunning&&state.mcSeconds===0)html+='<button class="mc-btn start" onclick="startMetcon()">START</button>';
+      h+='<div class="metcon-controls">';
+      if(!state.mcRunning&&getElapsed(timers.metcon)===0)h+='<button class="mc-btn start" onclick="beginMetconCountdown()">START</button>';
       else if(state.mcRunning){
-        html+='<button class="mc-btn stop" onclick="stopMetcon()">PAUSE</button>';
-        if(state.mcType==='fortime')html+='<button class="mc-btn round" onclick="recordRound()">\u{1F534} ROUND</button>';
-        html+='<button class="mc-btn finish" onclick="finishMetcon()">FINISH</button>';
-      }else{
-        html+='<button class="mc-btn start" onclick="startMetcon()">RESUME</button>';
-        html+='<button class="mc-btn finish" onclick="finishMetcon()">FINISH</button>';
-      }
-      html+='</div>';
+        h+='<button class="mc-btn stop" onclick="pauseMetcon()">PAUSE</button>';
+        if(state.mcType==='fortime')h+='<button class="mc-btn round" onclick="recordRound()">\uD83D\uDD34 ROUND</button>';
+        h+='<button class="mc-btn finish" onclick="finishMetcon()">FINISH</button>';
+      }else{h+='<button class="mc-btn start" onclick="resumeMetcon()">RESUME</button><button class="mc-btn finish" onclick="finishMetcon()">FINISH</button>';}
+      h+='</div>';
     }
-
-    // ForTime: splits display
     if(state.mcType==='fortime'){
-      html+='<div style="display:flex;justify-content:center;margin:4px 0"><span style="font-size:11px;color:var(--dim)">Rounds: </span><span id="mcRoundCounter" style="font-size:13px;font-weight:700;font-family:DM Mono,monospace;color:var(--accent);margin-left:4px">'+state.mcSplits.length+(state.mcExpectedRounds>0?'/'+state.mcExpectedRounds:'')+'</span></div>';
-      html+='<div class="metcon-splits" id="mcSplitsArea">';
-      state.mcSplits.forEach((t,i)=>{const p=i>0?state.mcSplits[i-1]:0;const d=t-p;html+='<div class="split-row"><span class="split-round">R'+(i+1)+'</span><span class="split-time">'+fmtTime(t)+'</span><span class="split-delta">('+fmtTime(d)+')</span></div>';});
-      html+='</div>';
+      h+='<div style="display:flex;justify-content:center;margin:4px 0"><span style="font-size:11px;color:var(--dim)">Rounds: </span><span id="mcRoundCounter" style="font-size:13px;font-weight:700;font-family:DM Mono,monospace;color:var(--accent);margin-left:4px">'+state.mcSplits.length+(state.mcExpectedRounds>0?'/'+state.mcExpectedRounds:'')+'</span></div>';
+      h+='<div class="metcon-splits" id="mcSplitsArea">';
+      state.mcSplits.forEach((t,i)=>{const p=i>0?state.mcSplits[i-1]:0;const d=t-p;h+='<div class="split-row"><span class="split-round">R'+(i+1)+'</span><span class="split-time">'+fmtTime(t)+'</span><span class="split-delta">('+fmtTime(d)+')</span></div>';});
+      h+='</div>';
     }
-
-    // AMRAP: round counter
     if(state.mcType==='amrap'){
-      html+='<div class="amrap-label">ROUNDS</div>';
-      html+='<div class="amrap-counter"><button onclick="state.mcRoundCount=Math.max(0,state.mcRoundCount-1);render()">\u2212</button><div class="amrap-count">'+state.mcRoundCount+'</div><button onclick="state.mcRoundCount++;render()">+</button></div>';
+      h+='<div class="amrap-label">ROUNDS</div><div class="amrap-counter"><button onclick="state.mcRoundCount=Math.max(0,state.mcRoundCount-1);document.querySelector(&quot;.amrap-count&quot;).textContent=state.mcRoundCount">\u2212</button><div class="amrap-count">'+state.mcRoundCount+'</div><button onclick="state.mcRoundCount++;document.querySelector(&quot;.amrap-count&quot;).textContent=state.mcRoundCount">+</button></div>';
     }
-
-    // Finished state: log
     if(state.mcFinished){
       if(state.mcType==='amrap'){
-        html+='<div class="amrap-label">ROUNDS</div>';
-        html+='<div class="amrap-counter"><button onclick="state.mcRoundCount=Math.max(0,state.mcRoundCount-1);render()">\u2212</button><div class="amrap-count">'+state.mcRoundCount+'</div><button onclick="state.mcRoundCount++;render()">+</button></div>';
-        html+='<div class="amrap-reps-row"><span class="amrap-reps-label">Extra reps:</span><input type="number" class="amrap-reps-input" id="amrapRepsInput" inputmode="numeric" placeholder="0"></div>';
+        h+='<div class="amrap-label">ROUNDS</div><div class="amrap-counter"><button onclick="state.mcRoundCount=Math.max(0,state.mcRoundCount-1);document.querySelector(&quot;.amrap-count&quot;).textContent=state.mcRoundCount">\u2212</button><div class="amrap-count">'+state.mcRoundCount+'</div><button onclick="state.mcRoundCount++;document.querySelector(&quot;.amrap-count&quot;).textContent=state.mcRoundCount">+</button></div>';
+        h+='<div class="amrap-reps-row"><span class="amrap-reps-label">Extra reps:</span><input type="number" class="amrap-reps-input" id="amrapRepsInput" inputmode="numeric" placeholder="0"></div>';
       }
-      if(state.mcType==='nft'){
-        html+='<div class="metcon-score-row"><input type="text" class="metcon-score-input" id="mcScore" placeholder="Notes / score"></div>';
-      }
-      html+='<div style="text-align:center;margin-top:12px"><button class="mc-btn start" onclick="logMetconResult()" style="background:var(--green)">LOG RESULT</button></div>';
+      if(state.mcType==='nft'){h+='<div class="metcon-score-row"><input type="text" class="metcon-score-input" id="mcScore" placeholder="Notes / score"></div>';}
+      h+='<div style="text-align:center;margin-top:12px"><button class="mc-btn start" onclick="logMetconResult()" style="background:var(--green)">LOG RESULT</button></div>';
     }
+    mc.innerHTML=h;content.appendChild(mc);
+  }
 
-    mc.innerHTML=html;
-    content.appendChild(mc);
+  // === WORKOUT COMPLETION SUMMARY ===
+  const allSets=gl(),totalSets=allSets.length,doneSets=allSets.filter(l=>l["Actual Weight"]).length;
+  const metconDone=state.mcFinished||!metcons.length;
+  if(totalSets>0&&doneSets===totalSets&&metconDone){
+    const totalVol=allSets.reduce((sum,s)=>{const w=Number(s["Actual Weight"])||0,r=Number(s["Actual Reps"])||0;return sum+w*r;},0);
+    const wkElapsed=Math.floor(getElapsed(timers.workout)/1000);
+    const wkMin=Math.floor(wkElapsed/60);
+    const sc=document.createElement('div');sc.className='summary-card';
+    sc.innerHTML='<div class="summary-title">\u2705 SESSION COMPLETE</div><div class="summary-stats"><div class="summary-stat"><div class="summary-num">'+doneSets+'</div><div class="summary-label">SETS</div></div><div class="summary-stat"><div class="summary-num">'+Math.round(totalVol).toLocaleString()+'</div><div class="summary-label">TOTAL LBS</div></div>'+(wkElapsed>0?'<div class="summary-stat"><div class="summary-num">'+wkMin+'</div><div class="summary-label">MINUTES</div></div>':'')+'</div>';
+    content.appendChild(sc);
   }
 
   // === DAY NOTES ===
-  const noteData=gn();
-  const noteText=noteData?noteData.Notes||'':'';
+  const noteData=gn();const noteText=noteData?noteData.Notes||'':'';
   const nc=document.createElement("div");nc.className="day-notes-card";
-  nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div></div>'
-    +'<div class="day-notes-prompts">'
-    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Energy level:\')">\u26A1 Energy</div>'
-    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Sleep:\')">\uD83D\uDE34 Sleep</div>'
-    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Body weight:\')">\u2696\uFE0F Weight</div>'
-    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Pain/tightness:\')">\uD83D\uDD34 Pain</div>'
-    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Form notes:\')">\uD83D\uDCCB Form</div>'
-    +'<div class="day-notes-prompt" onclick="insertPrompt(\'Next session:\')">\u27A1\uFE0F Next</div>'
-    +'</div>'
-    +'<textarea class="day-notes-textarea" id="dayNotesText" placeholder="How did the session go? Energy, sleep, bodyweight, anything that felt off, PRs hit, adjustments for next time...">'+noteText.replace(/</g,'&lt;')+'</textarea>'
-    +'<button class="day-notes-save-btn" id="dayNotesSaveBtn" onclick="saveDayNotes()">SAVE NOTES</button>';
+  nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div></div><div class="day-notes-prompts"><div class="day-notes-prompt" onclick="insertPrompt(\'Energy level:\')">'+'\u26A1 Energy</div><div class="day-notes-prompt" onclick="insertPrompt(\'Sleep:\')">'+'\uD83D\uDE34 Sleep</div><div class="day-notes-prompt" onclick="insertPrompt(\'Body weight:\')">'+'\u2696\uFE0F Weight</div><div class="day-notes-prompt" onclick="insertPrompt(\'Pain/tightness:\')">'+'\uD83D\uDD34 Pain</div><div class="day-notes-prompt" onclick="insertPrompt(\'Form notes:\')">'+'\uD83D\uDCCB Form</div><div class="day-notes-prompt" onclick="insertPrompt(\'Next session:\')">'+'\u27A1\uFE0F Next</div></div><textarea class="day-notes-textarea" id="dayNotesText" placeholder="How did the session go? Energy, sleep, bodyweight, anything that felt off, PRs, adjustments...">'+noteText.replace(/</g,'&lt;')+'</textarea><button class="day-notes-save-btn" id="dayNotesSaveBtn" onclick="saveDayNotes()">SAVE NOTES</button>';
   content.appendChild(nc);
 }
 
-function insertPrompt(text){const ta=document.getElementById('dayNotesText');if(!ta)return;const cur=ta.value;const prefix=cur&&!cur.endsWith('\n')&&!cur.endsWith(' ')?'\n':'';ta.value=cur+prefix+text+' ';ta.focus();}
+function insertPrompt(text){const ta=document.getElementById('dayNotesText');if(!ta)return;const cur=ta.value;const pfx=cur&&!cur.endsWith('\n')&&!cur.endsWith(' ')?'\n':'';ta.value=cur+pfx+text+' ';ta.focus();}
 async function saveDayNotes(){
-  const ta=document.getElementById('dayNotesText');
-  const btn=document.getElementById('dayNotesSaveBtn');
-  if(!ta)return;
-  const text=ta.value;
-  btn.textContent='Saving...';btn.disabled=true;
-  try{
-    await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"logDayNotes",week:state.week,day:state.day,date:today(),notes:text})});
-    const note=gn();if(note){note.Notes=text;note.Date=today();}
-    btn.textContent='Saved \u2713';btn.className='day-notes-save-btn saved';
-    setTimeout(()=>{btn.textContent='SAVE NOTES';btn.className='day-notes-save-btn';btn.disabled=false;},2500);
-  }catch(e){btn.textContent='SAVE NOTES';btn.disabled=false;toast("Failed to save notes");}
+  const ta=document.getElementById('dayNotesText'),btn=document.getElementById('dayNotesSaveBtn');
+  if(!ta)return;btn.textContent='Saving...';btn.disabled=true;
+  const ok=await apiWrite({action:"logDayNotes",week:state.week,day:state.day,date:today(),notes:ta.value});
+  if(ok){const n=gn();if(n){n.Notes=ta.value;n.Date=today();}btn.textContent='Saved \u2713';btn.className='day-notes-save-btn saved';}
+  else{btn.textContent='Queued (offline)';btn.className='day-notes-save-btn saved';}
+  setTimeout(()=>{btn.textContent='SAVE NOTES';btn.className='day-notes-save-btn';btn.disabled=false;},2500);
 }
 
 // === TOGGLE LOG/UNLOG ===
 async function toggleSet(exIdx,setIdx,currentlySaved){
   const sk=exIdx+'_'+setIdx;if(state.saving[sk])return;
-  const program=gp(),log=gl();
-  const exercises=[],seen=new Set();
+  const program=gp(),log=gl(),exercises=[],seen=new Set();
   program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
   const ex=exercises[exIdx];
   const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
-  const s=sets[setIdx];
-  state.saving[sk]=true;
+  const s=sets[setIdx];state.saving[sk]=true;haptic(15);
   if(currentlySaved){
     const ow=s["Actual Weight"],or2=s["Actual Reps"];
     s["Actual Weight"]="";s["Actual Reps"]="";render();toast("Set cleared \u21A9","undo");
-    try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:"",weight:"",reps:""})});}
-    catch(e){s["Actual Weight"]=ow;s["Actual Reps"]=or2;render();toast("Failed \u2014 restored");}
+    const ok=await apiWrite({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:"",weight:"",reps:""});
+    if(!ok){s["Actual Weight"]=ow;s["Actual Reps"]=or2;render();}
   }else{
     const w=document.getElementById('w_'+exIdx+'_'+setIdx).value;
     const r=document.getElementById('r_'+exIdx+'_'+setIdx).value;
     if(!w&&!r){state.saving[sk]=false;return;}
-    s["Actual Weight"]=Number(w)||0;s["Actual Reps"]=Number(r)||0;render();toast("Set logged \u2713");
+    s["Actual Weight"]=Number(w)||0;s["Actual Reps"]=Number(r)||0;
+    // Auto-advance: if all sets done on this exercise, expand next
+    const allSetsDone=sets.every(ss=>ss["Actual Weight"]);
+    if(allSetsDone&&exIdx<exercises.length-1)state.expandedEx=exIdx+1;
+    render();toast("Set logged \u2713");
     const restSec=getRestSec(ex.Exercise,s["Target Reps"],state.week);
-    startRest(restSec,ex.Exercise);
-    try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:today(),weight:Number(w)||0,reps:Number(r)||0})});}
-    catch(e){s["Actual Weight"]="";s["Actual Reps"]="";render();toast("Failed \u2014 check connection");}
+    startRestFn(restSec,ex.Exercise);
+    const ok=await apiWrite({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:today(),weight:Number(w)||0,reps:Number(r)||0});
+    if(!ok){/* stays in queue, UI already updated optimistically */}
   }
   state.saving[sk]=false;
 }
 
-function toggleWorkoutTimer(){const btn=document.getElementById("workoutTimer");if(state.workoutRunning){state.workoutRunning=false;clearInterval(state.workoutInterval);btn.className="ctrl-btn";btn.textContent="START";}else{state.workoutRunning=true;state.workoutElapsed=0;state.workoutInterval=setInterval(()=>{state.workoutElapsed++;const m=Math.floor(state.workoutElapsed/60),s=state.workoutElapsed%60;btn.textContent=m+':'+s.toString().padStart(2,'0');},1000);btn.className="ctrl-btn running";btn.textContent="0:00";}}
+// === WORKOUT TIMER ===
+function toggleWorkoutTimer(){
+  const btn=document.getElementById("workoutTimer");
+  if(state.workoutRunning){state.workoutRunning=false;pauseTimer('workout');btn.className="ctrl-btn";btn.textContent="START";releaseWakeLock();}
+  else{state.workoutRunning=true;resetTimer('workout');startTimer('workout');btn.className="ctrl-btn running";btn.textContent="0:00";acquireWakeLock();}
+}
+
+// === PULL TO REFRESH ===
+let pullStart=0,pulling=false;
+document.addEventListener('touchstart',e=>{if(window.scrollY===0)pullStart=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchmove',e=>{if(pullStart>0){const d=e.touches[0].clientY-pullStart;if(d>60&&!pulling){pulling=true;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='\u2B07 Release to refresh';pi.style.height='30px';}}}},{passive:true});
+document.addEventListener('touchend',()=>{if(pulling){pulling=false;pullStart=0;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='Refreshing...';pi.style.height='30px';}initialLoad().then(()=>{if(pi){pi.textContent='';pi.style.height='0';}});}else{pullStart=0;}},{passive:true});
 
 initialLoad();
 </script>
