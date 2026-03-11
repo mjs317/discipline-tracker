@@ -43,6 +43,7 @@ button{font-family:inherit}
 .ctrl-btn.running{background:rgba(139,0,0,0.3);border:1px solid var(--accent)}
 .sync-btn{background:rgba(45,106,79,0.25);color:var(--green-light)}
 .sync-btn.syncing{opacity:0.8;pointer-events:none}
+.sync-btn.unsaved{box-shadow:0 0 0 2px var(--yellow)}
 .sync-btn:active{background:rgba(45,106,79,0.4)}
 .content{padding:12px 12px 100px}
 .exercise-card{background:var(--card);border-radius:12px;margin-bottom:6px;overflow:hidden;border:1px solid var(--border)}
@@ -136,6 +137,10 @@ button{font-family:inherit}
 .rest-toggle{border:none;border-radius:8px;color:#fff;padding:8px 14px;min-height:44px;font-size:13px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
 .rest-toggle.pause{background:rgba(255,255,255,0.2)}.rest-toggle.play{background:var(--green)}
 .rest-close{background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:8px 12px;min-height:44px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.rest-skip{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 12px;min-height:44px;font-size:12px;font-weight:700;cursor:pointer}
+.rest-add30{background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:8px 10px;min-height:44px;font-size:12px;cursor:pointer;font-family:'DM Mono',monospace}
+.rest-bell{background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:8px 10px;min-height:44px;font-size:14px;cursor:pointer;opacity:0.9}
+.rest-bell.muted{opacity:0.4}
 .loading{text-align:center;padding:60px 20px;color:var(--dim);font-size:14px}
 .error-msg{text-align:center;padding:60px 20px;color:var(--accent);font-size:14px;line-height:1.6}
 .toast{position:fixed;top:max(20px,env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;z-index:200;opacity:0;transition:opacity 0.3s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.4)}
@@ -165,8 +170,8 @@ let audioCtx=null;
 function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();}
 document.addEventListener('touchstart',function(){initAudio();},{once:true});
 document.addEventListener('click',function(){initAudio();},{once:true});
-function playBell(){try{initAudio();const n=audioCtx.currentTime;[830,1245,1660,2075].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime([.4,.25,.15,.1][i],n);g.gain.exponentialRampToValueAtTime(.001,n+1.8);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+1.8);});setTimeout(()=>{const n2=audioCtx.currentTime;[830,1245].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,n2);g.gain.setValueAtTime([.2,.12][i],n2);g.gain.exponentialRampToValueAtTime(.001,n2+1.2);o.connect(g);g.connect(audioCtx.destination);o.start(n2);o.stop(n2+1.2);});},350);}catch(e){}}
-function playBeep(){try{initAudio();const n=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(1000,n);g.gain.setValueAtTime(.3,n);g.gain.exponentialRampToValueAtTime(.001,n+.2);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+.2);}catch(e){}}
+function playBell(){if(getBellMuted())return;try{initAudio();const n=audioCtx.currentTime;[830,1245,1660,2075].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime([.4,.25,.15,.1][i],n);g.gain.exponentialRampToValueAtTime(.001,n+1.8);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+1.8);});setTimeout(()=>{const n2=audioCtx.currentTime;[830,1245].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(f,n2);g.gain.setValueAtTime([.2,.12][i],n2);g.gain.exponentialRampToValueAtTime(.001,n2+1.2);o.connect(g);g.connect(audioCtx.destination);o.start(n2);o.stop(n2+1.2);});},350);}catch(e){}}
+function playBeep(){if(getBellMuted())return;try{initAudio();const n=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(1000,n);g.gain.setValueAtTime(.3,n);g.gain.exponentialRampToValueAtTime(.001,n+.2);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+.2);}catch(e){}}
 function playCountdown(){try{initAudio();const n=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='square';o.frequency.setValueAtTime(600,n);g.gain.setValueAtTime(.15,n);g.gain.exponentialRampToValueAtTime(.001,n+.15);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+.15);}catch(e){}}
 function haptic(ms){try{navigator.vibrate(ms||10);}catch(e){}}
 
@@ -176,7 +181,17 @@ const DAY_MAP={1:"D1",2:"D2",3:"D3",4:"D4"};
 let allProgram=null,allLog=null,allMetcons=null,allDayNotes=null,dataLoaded=false;
 
 const LS_LOG_PREFIX='disc_log_';
+const LS_VIEW='disc_view';
+const LS_BELL='disc_bell';
+const LS_EXPANDED='disc_expanded_';
 function saveLocalLog(){if(!allLog)return;try{localStorage.setItem(LS_LOG_PREFIX+state.week+'_'+state.day,JSON.stringify(gl()));}catch(e){}}
+function saveView(){try{localStorage.setItem(LS_VIEW,JSON.stringify({week:state.week,day:state.day}));}catch(e){}}
+function loadView(){try{const v=localStorage.getItem(LS_VIEW);if(v){const p=JSON.parse(v);if(p.week>=1&&p.week<=4&&p.day>=1&&p.day<=4){state.week=p.week;state.day=p.day;}}}catch(e){}}
+function hasUnsyncedWorkout(){try{return !!localStorage.getItem(LS_LOG_PREFIX+state.week+'_'+state.day);}catch(e){return false;}}
+function getBellMuted(){try{return localStorage.getItem(LS_BELL)==='1';}catch(e){return false;}}
+function setBellMuted(m){try{localStorage.setItem(LS_BELL,m?'1':'0');}catch(e){}}
+function saveExpanded(){try{localStorage.setItem(LS_EXPANDED+state.week+'_'+state.day,String(state.expandedEx));}catch(e){}}
+function loadExpanded(){try{const v=localStorage.getItem(LS_EXPANDED+state.week+'_'+state.day);if(v!==null){const n=parseInt(v,10);if(!isNaN(n)&&n>=0)state.expandedEx=n;}else state.expandedEx=0;}catch(e){state.expandedEx=0;}}
 function mergeLocalLogIntoAllLog(){
   if(!allLog)return;
   for(let w=1;w<=4;w++)for(let d=1;d<=4;d++){
@@ -307,9 +322,10 @@ function getMetconConfig(metcon){
 let state={week:1,day:1,expandedEx:0,workoutRunning:false,restVisible:false,
   mcType:'fortime',mcRunning:false,mcFinished:false,mcCapSec:0,mcExpectedRounds:0,
   mcSplits:[],mcRoundCount:0,mcEmomMoves:null,mcCountdown:0,mcCountdownActive:false,
-  _lastMcSec:-1,saving:{}};
+  _lastMcSec:-1,saving:{},_clearConfirm:null};
 
 function today(){return new Date().toISOString().split("T")[0];}
+function escapeHtml(s){if(s==null)return'';const t=String(s);return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type==='undo'?' undo':type==='synced'?' synced':'');clearTimeout(t._to);t._to=setTimeout(()=>t.className="toast",2500);}
 function gp(){return allProgram?allProgram.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
 function gl(){return allLog?allLog.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
@@ -321,15 +337,15 @@ function buildNav(){
   for(let w=1;w<=4;w++){const c=document.createElement("div");c.className="nav-week";const wb=document.createElement("button");wb.className="nav-week-btn"+(state.week===w?" active":"");wb.textContent="W"+w;wb.onclick=()=>{state.week=w;state.day=1;switchDay();};c.appendChild(wb);const ds=document.createElement("div");ds.className="nav-days";for(let d=1;d<=4;d++){const db=document.createElement("button");db.className="nav-day-btn"+(state.week===w&&state.day===d?" active":"");db.textContent=DAY_MAP[d];db.onclick=()=>{state.week=w;state.day=d;switchDay();};ds.appendChild(db);}c.appendChild(ds);g.appendChild(c);}
 }
 
-function switchDay(){state.expandedEx=0;resetMetconState();state.saving={};buildNav();render();}
+function switchDay(){state._clearConfirm=null;resetMetconState();state.saving={};loadExpanded();saveView();buildNav();render();}
 
 function resetMetconState(){state.mcRunning=false;state.mcFinished=false;state.mcSplits=[];state.mcRoundCount=0;state.mcCountdownActive=false;state._lastMcSec=-1;pauseTimer('metcon');resetTimer('metcon');}
 
 async function initialLoad(){
   document.getElementById("content").innerHTML='<div class="skel"><div class="skel-bar" style="width:65%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:50%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:70%"></div><div class="skel-bar short"></div></div>';
   buildNav();
-  try{const[pR,lR,mR,nR]=await Promise.all([fetch(API+"?action=getProgram"),fetch(API+"?action=getLog"),fetch(API+"?action=getMetcons"),fetch(API+"?action=getDayNotes")]);const[pD,lD,mD,nD]=await Promise.all([pR.json(),lR.json(),mR.json(),nR.json()]);allProgram=pD;allLog=lD;allMetcons=mD;allDayNotes=nD;mergeLocalLogIntoAllLog();dataLoaded=true;render();}
-  catch(e){document.getElementById("content").innerHTML='<div class="error-msg">Could not reach the sheet. Check connection and refresh.</div>';console.error(e);}
+  try{const[pR,lR,mR,nR]=await Promise.all([fetch(API+"?action=getProgram"),fetch(API+"?action=getLog"),fetch(API+"?action=getMetcons"),fetch(API+"?action=getDayNotes")]);const[pD,lD,mD,nD]=await Promise.all([pR.json(),lR.json(),mR.json(),nR.json()]);allProgram=pD;allLog=lD;allMetcons=mD;allDayNotes=nD;mergeLocalLogIntoAllLog();loadView();loadExpanded();buildNav();dataLoaded=true;render();}
+  catch(e){document.getElementById("content").innerHTML='<div class="error-msg">Can\'t reach the sheet. Check Wi‑Fi or cell, then pull down to try again.</div>';console.error(e);}
 }
 
 function updateHeader(){
@@ -338,6 +354,7 @@ function updateHeader(){
 
 function updateProgress(){
   const log=gl(),total=log.length,done=log.filter(l=>l["Actual Weight"]).length,pct=total?Math.round(done/total*100):0;document.getElementById("setCount").textContent=done+"/"+total+" sets";document.getElementById("setPct").textContent=pct+"%";const f=document.getElementById("progressFill");f.style.width=pct+"%";f.style.background='';f.className="progress-fill "+(pct===100?"done":"active");
+  const syncBtn=document.getElementById("syncBtn");if(syncBtn){const unsynced=hasUnsyncedWorkout();syncBtn.textContent=unsynced?"SYNC \u2022":"SYNC";syncBtn.classList.toggle("unsaved",unsynced);syncBtn.title=unsynced?"You have unsaved sets — tap to sync to sheet":"Sync all sets to Google Sheet";}
 }
 
 // === REST TIMER ===
@@ -347,11 +364,14 @@ function renderRestDisplay(remaining){
   const ov=remaining<=0,a=Math.abs(remaining),m=Math.floor(a/60),s=a%60;
   el.className="rest-timer "+(ov?"over":"normal");
   const ps=[60,90,120,180,240];
-  el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time">'+(ov?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(timers.rest.exercise?'<div class="rest-exercise">'+timers.rest.exercise+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(timers.rest.target===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button class="rest-toggle '+(timers.rest.running?'pause':'play')+'" onclick="toggleRestPause()">'+(timers.rest.running?'\u23F8':'\u25B6')+'</button><button class="rest-close" onclick="closeRest()">\u2715</button></div>';
+  el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time">'+(ov?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(timers.rest.exercise?'<div class="rest-exercise">'+escapeHtml(timers.rest.exercise)+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(timers.rest.target===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button class="rest-add30" onclick="addRest30()">+30s</button><button class="rest-skip" onclick="skipRest()">Skip</button><button class="rest-toggle '+(timers.rest.running?'pause':'play')+'" onclick="toggleRestPause()">'+(timers.rest.running?'\u23F8':'\u25B6')+'</button><button class="rest-bell'+(getBellMuted()?' muted':'')+'" onclick="toggleBellMuted()" title="'+(getBellMuted()?'Turn bell on':'Turn bell off')+'">\uD83D\uDD14</button><button class="rest-close" onclick="closeRest()">\u2715</button></div>';
 }
 function setRestPreset(s){timers.rest.target=s;timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');}
 function toggleRestPause(){if(timers.rest.running)pauseTimer('rest');else startTimer('rest');}
 function closeRest(){state.restVisible=false;pauseTimer('rest');resetTimer('rest');timers.rest.target=120;document.getElementById("restTimer").style.display="none";}
+function skipRest(){closeRest();}
+function addRest30(){timers.rest.target=(timers.rest.target||120)+30;if(!timers.rest.running)startTimer('rest');}
+function toggleBellMuted(){setBellMuted(!getBellMuted());renderRestDisplay(Math.max(0,timers.rest.target-Math.floor(getElapsed(timers.rest)/1000)));}
 
 // === METCON COUNTDOWN + TIMER ===
 function beginMetconCountdown(){
@@ -429,6 +449,7 @@ function render(){
   if(!dataLoaded)return;
   const exercises=[],seen=new Set();
   program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
+  if(state.expandedEx>=exercises.length)state.expandedEx=Math.max(0,exercises.length-1);
   if(!exercises.length){content.innerHTML='<div class="loading">No workout for W'+state.week+'D'+state.day+'</div>';return;}
 
   exercises.forEach((ex,i)=>{
@@ -440,7 +461,7 @@ function render(){
     const prevPerf=getPrevPerf(ex.Exercise,state.week);
     const card=document.createElement("div");card.className="exercise-card"+(expanded?" expanded":"");
     const header=document.createElement("div");header.className="exercise-header";
-    header.onclick=()=>{state.expandedEx=state.expandedEx===i?-1:i;render();};
+    header.onclick=()=>{state.expandedEx=state.expandedEx===i?-1:i;saveExpanded();render();};
     let headerHTML='<div><div class="ex-name '+(allDone?'done':'')+'">'+(allDone?'\u2713 ':'')+ex.Exercise+'</div><div class="ex-sub">'+ex["Target Sets"]+'\u00D7'+(ex["Target Reps"]||'MAX')+' \u2014 '+notes.substring(0,45)+(notes.length>45?'\u2026':'')+'</div>';
     if(prevPerf)headerHTML+='<div class="ex-prev">Last: '+prevPerf+'</div>';
     headerHTML+='</div><div class="ex-count" style="color:'+(allDone?'var(--green)':completed>0?'var(--accent)':'var(--dim)')+'">'+completed+'/'+sets.length+'</div>';
@@ -546,7 +567,7 @@ function render(){
   // === DAY NOTES ===
   const noteData=gn();const noteText=noteData?noteData.Notes||'':'';
   const nc=document.createElement("div");nc.className="day-notes-card";
-  nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div></div><div class="day-notes-prompts"><div class="day-notes-prompt" onclick="insertPrompt(\'Energy level:\')">'+'\u26A1 Energy</div><div class="day-notes-prompt" onclick="insertPrompt(\'Sleep:\')">'+'\uD83D\uDE34 Sleep</div><div class="day-notes-prompt" onclick="insertPrompt(\'Body weight:\')">'+'\u2696\uFE0F Weight</div><div class="day-notes-prompt" onclick="insertPrompt(\'Pain/tightness:\')">'+'\uD83D\uDD34 Pain</div><div class="day-notes-prompt" onclick="insertPrompt(\'Form notes:\')">'+'\uD83D\uDCCB Form</div><div class="day-notes-prompt" onclick="insertPrompt(\'Next session:\')">'+'\u27A1\uFE0F Next</div></div><textarea class="day-notes-textarea" id="dayNotesText" placeholder="How did the session go? Energy, sleep, bodyweight, anything that felt off, PRs, adjustments...">'+noteText.replace(/</g,'&lt;')+'</textarea><button class="day-notes-save-btn" id="dayNotesSaveBtn" onclick="saveDayNotes()">SAVE NOTES</button>';
+  nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div></div><div class="day-notes-prompts"><div class="day-notes-prompt" onclick="insertPrompt(\'Energy level:\')">'+'\u26A1 Energy</div><div class="day-notes-prompt" onclick="insertPrompt(\'Sleep:\')">'+'\uD83D\uDE34 Sleep</div><div class="day-notes-prompt" onclick="insertPrompt(\'Body weight:\')">'+'\u2696\uFE0F Weight</div><div class="day-notes-prompt" onclick="insertPrompt(\'Pain/tightness:\')">'+'\uD83D\uDD34 Pain</div><div class="day-notes-prompt" onclick="insertPrompt(\'Form notes:\')">'+'\uD83D\uDCCB Form</div><div class="day-notes-prompt" onclick="insertPrompt(\'Next session:\')">'+'\u27A1\uFE0F Next</div></div><textarea class="day-notes-textarea" id="dayNotesText" placeholder="How did the session go? Energy, sleep, bodyweight, anything that felt off, PRs, adjustments...">'+escapeHtml(noteText)+'</textarea><button class="day-notes-save-btn" id="dayNotesSaveBtn" onclick="saveDayNotes()">SAVE NOTES</button>';
   content.appendChild(nc);
 }
 
@@ -574,16 +595,17 @@ function toggleSet(exIdx,setIdx,currentlySaved){
     const savedW=Number(s["Actual Weight"])||0,savedR=Number(s["Actual Reps"])||0;
     if(wVal!==savedW||rVal!==savedR){
       s["Actual Weight"]=wVal;s["Actual Reps"]=rVal;s["Date"]=wVal||rVal?today():"";
-      saveLocalLog();render();toast("Updated \u2713");
+      saveLocalLog();render();toast("Updated \u2713");state._clearConfirm=null;
     }else{
-      s["Actual Weight"]="";s["Actual Reps"]="";s["Date"]="";
-      saveLocalLog();render();toast("Set cleared \u21A9","undo");
+      if(state._clearConfirm===sk){s["Actual Weight"]="";s["Actual Reps"]="";s["Date"]="";saveLocalLog();render();toast("Set cleared \u21A9","undo");state._clearConfirm=null;}
+      else{state._clearConfirm=sk;toast("Tap again to clear set","undo");setTimeout(()=>{if(state._clearConfirm===sk)state._clearConfirm=null;},3000);}
     }
   }else{
+    state._clearConfirm=null;
     if(!wVal&&!rVal){state.saving[sk]=false;return;}
     s["Actual Weight"]=wVal;s["Actual Reps"]=rVal;s["Date"]=today();
     const allSetsDone=sets.every(ss=>ss["Actual Weight"]!=null&&ss["Actual Weight"]!==""||ss["Actual Reps"]!=null&&ss["Actual Reps"]!=="");
-    if(allSetsDone&&exIdx<exercises.length-1)state.expandedEx=exIdx+1;
+    if(allSetsDone&&exIdx<exercises.length-1){state.expandedEx=exIdx+1;saveExpanded();}
     saveLocalLog();render();toast("Set logged \u2713");
     const restSec=getRestSec(ex.Exercise,s["Target Reps"],state.week);
     startRestFn(restSec,ex.Exercise);
@@ -603,8 +625,8 @@ async function syncWorkoutToSheet(){
   try{localStorage.removeItem(LS_LOG_PREFIX+state.week+'_'+state.day);}catch(e){}
   btn.classList.remove('syncing');btn.textContent='SYNC';
   if(failCount===0)toast("Synced "+okCount+" sets to sheet");
-  else if(okCount>0)toast(okCount+" synced, "+failCount+" queued (offline)");
-  else toast("Offline — will sync when back online");
+  else if(okCount>0)toast(failCount+" failed \u2014 tap SYNC again to retry","undo");
+  else toast("Offline \u2014 tap SYNC again when back online","undo");
 }
 
 // === WORKOUT TIMER ===
@@ -618,7 +640,7 @@ function toggleWorkoutTimer(){
 let pullStart=0,pulling=false;
 document.addEventListener('touchstart',e=>{if(window.scrollY===0)pullStart=e.touches[0].clientY;},{passive:true});
 document.addEventListener('touchmove',e=>{if(pullStart>0){const d=e.touches[0].clientY-pullStart;if(d>60&&!pulling){pulling=true;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='\u2B07 Release to refresh';pi.style.height='30px';}}}},{passive:true});
-document.addEventListener('touchend',()=>{if(pulling){pulling=false;pullStart=0;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='Refreshing...';pi.style.height='30px';}initialLoad().then(()=>{if(pi){pi.textContent='';pi.style.height='0';}});}else{pullStart=0;}},{passive:true});
+document.addEventListener('touchend',()=>{if(pulling){pulling=false;pullStart=0;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='Refreshing… (local data kept)';pi.style.height='30px';}initialLoad().then(()=>{if(pi){pi.textContent='';pi.style.height='0';}});}else{pullStart=0;}},{passive:true});
 
 initialLoad();
 </script>
