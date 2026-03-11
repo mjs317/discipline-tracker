@@ -33,6 +33,8 @@ button{font-family:inherit}
 .nav-day-btn{flex:1;padding:4px 0;border:none;font-size:9px;cursor:pointer;font-weight:600;background:rgba(255,255,255,0.03);color:var(--dim)}
 .nav-day-btn:first-child{border-radius:0 0 0 4px}.nav-day-btn:last-child{border-radius:0 0 4px 0}
 .nav-day-btn.active{background:rgba(139,0,0,0.6);color:#fff}
+.unsynced-banner{background:rgba(230,194,0,0.15);border-bottom:1px solid rgba(230,194,0,0.3);padding:6px 16px;text-align:center;font-size:11px;color:var(--yellow)}
+.unsynced-banner a,.unsynced-banner button{background:0 0;border:none;color:var(--green-light);text-decoration:underline;cursor:pointer;font-weight:700}
 .progress-row{display:flex;align-items:center;gap:12px;margin-top:12px}
 .progress-bar-wrap{flex:1}
 .progress-info{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-bottom:4px}
@@ -66,6 +68,8 @@ button{font-family:inherit}
 .set-log-btn{min-width:44px;min-height:44px;width:44px;height:44px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;background:var(--accent);color:#fff;flex-shrink:0}
 .set-log-btn.saved{background:rgba(45,106,79,0.15);color:var(--green-light)}
 .set-log-btn:active{transform:scale(0.95)}
+.set-copy-btn{min-width:32px;height:36px;padding:0 6px;border:none;border-radius:6px;background:rgba(255,255,255,0.06);color:var(--dim);font-size:11px;cursor:pointer;flex-shrink:0}
+.set-copy-btn:active{background:rgba(139,0,0,0.2)}
 .form-note{margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(139,0,0,0.08);font-size:11px;color:var(--yellow);line-height:1.5}
 .e1rm{font-size:10px;color:var(--accent);font-family:'DM Mono',monospace;margin-top:6px;padding:4px 8px}
 .metcon-card{background:var(--card-active);border-radius:12px;margin-bottom:8px;border:1px solid rgba(139,0,0,0.3);padding:16px;overflow:hidden}
@@ -130,6 +134,7 @@ button{font-family:inherit}
 .rest-timer.over{background:var(--accent);border-top:2px solid #ff4444}
 .rest-label{font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:0.1em;margin-bottom:2px}
 .rest-exercise{font-size:10px;color:rgba(255,255,255,0.7);margin-top:1px;font-weight:500}
+.rest-next{font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px}
 .rest-time{font-size:28px;font-weight:800;font-family:'DM Mono',monospace}
 .rest-controls{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .rest-preset{background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:8px 12px;min-height:44px;font-size:12px;cursor:pointer;font-family:'DM Mono',monospace;display:inline-flex;align-items:center;justify-content:center}
@@ -151,6 +156,11 @@ button{font-family:inherit}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .pull-indicator{text-align:center;padding:8px;font-size:11px;color:var(--dim);transition:all 0.2s}
 .offline-badge{position:fixed;top:8px;right:8px;background:#b85c00;color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;z-index:300;display:none}
+.cycle-card{background:linear-gradient(135deg,#1a1a2a 0%,#1a1a1a 100%);border-radius:12px;margin-top:12px;border:1px solid rgba(139,0,0,0.3);padding:20px;text-align:center}
+.cycle-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:8px}
+.cycle-desc{font-size:12px;color:var(--dim);line-height:1.5;margin-bottom:14px}
+.cycle-btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer}
+.cycle-btn:active{transform:scale(0.96)}
 </style>
 </head>
 <body>
@@ -159,6 +169,7 @@ button{font-family:inherit}
 <div class="header">
 <div class="header-top"><div><div class="week-label" id="weekLabel">WEEK 1 — DISCIPLINE</div><div class="day-title" id="dayTitle">Loading...</div></div><div class="gear-badge gear-gym" id="gearBadge">—</div></div>
 <div class="nav-grid" id="navGrid"></div>
+<div id="unsyncedBanner" class="unsynced-banner" style="display:none">Local changes — tap <button type="button" onclick="document.getElementById('syncBtn').click()">SYNC</button> to save to sheet</div>
 <div class="progress-row"><div class="progress-bar-wrap"><div class="progress-info"><span id="setCount">0/0 sets</span><span id="setPct">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div><button class="ctrl-btn" id="workoutTimer" onclick="toggleWorkoutTimer()">START</button><button class="ctrl-btn sync-btn" id="syncBtn" onclick="syncWorkoutToSheet()" title="Sync all sets to Google Sheet">SYNC</button></div>
 </div>
 <div id="pullIndicator" class="pull-indicator" style="height:0;overflow:hidden"></div>
@@ -175,7 +186,7 @@ function playBeep(){if(getBellMuted())return;try{initAudio();const n=audioCtx.cu
 function playCountdown(){try{initAudio();const n=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='square';o.frequency.setValueAtTime(600,n);g.gain.setValueAtTime(.15,n);g.gain.exponentialRampToValueAtTime(.001,n+.15);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+.15);}catch(e){}}
 function haptic(ms){try{navigator.vibrate(ms||10);}catch(e){}}
 
-const API="https://script.google.com/macros/s/AKfycbyPUKfdLB-GmOu3rv4yH9m5hk1ZoedhYv4MHAB9F1ukfxNtDYlaZN_JA9z5MKWEe81D/exec";
+const API="https://script.google.com/macros/s/AKfycbwI0tMnH5Ln54Ha4j4irdfcJuwHAcVVr9fe-2bbyG3LDQosGfH5cldHrqP7rk6uA3k/exec";
 const WEEK_NAMES={1:"DISCIPLINE",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"};
 const DAY_MAP={1:"D1",2:"D2",3:"D3",4:"D4"};
 let allProgram=null,allLog=null,allMetcons=null,allDayNotes=null,dataLoaded=false;
@@ -184,12 +195,15 @@ const LS_LOG_PREFIX='disc_log_';
 const LS_VIEW='disc_view';
 const LS_BELL='disc_bell';
 const LS_EXPANDED='disc_expanded_';
+const LS_CYCLE='disc_cycle_start';
 function saveLocalLog(){if(!allLog)return;try{localStorage.setItem(LS_LOG_PREFIX+state.week+'_'+state.day,JSON.stringify(gl()));}catch(e){}}
 function saveView(){try{localStorage.setItem(LS_VIEW,JSON.stringify({week:state.week,day:state.day}));}catch(e){}}
 function loadView(){try{const v=localStorage.getItem(LS_VIEW);if(v){const p=JSON.parse(v);if(p.week>=1&&p.week<=4&&p.day>=1&&p.day<=4){state.week=p.week;state.day=p.day;}}}catch(e){}}
 function hasUnsyncedWorkout(){try{return !!localStorage.getItem(LS_LOG_PREFIX+state.week+'_'+state.day);}catch(e){return false;}}
 function getBellMuted(){try{return localStorage.getItem(LS_BELL)==='1';}catch(e){return false;}}
 function setBellMuted(m){try{localStorage.setItem(LS_BELL,m?'1':'0');}catch(e){}}
+function getCycleStartDate(){try{const v=localStorage.getItem(LS_CYCLE);return v||'2000-01-01';}catch(e){return '2000-01-01';}}
+function saveCycleStartDate(d){try{localStorage.setItem(LS_CYCLE,d);}catch(e){}}
 function saveExpanded(){try{localStorage.setItem(LS_EXPANDED+state.week+'_'+state.day,String(state.expandedEx));}catch(e){}}
 function loadExpanded(){try{const v=localStorage.getItem(LS_EXPANDED+state.week+'_'+state.day);if(v!==null){const n=parseInt(v,10);if(!isNaN(n)&&n>=0)state.expandedEx=n;}else state.expandedEx=0;}catch(e){state.expandedEx=0;}}
 function mergeLocalLogIntoAllLog(){
@@ -287,7 +301,8 @@ function est1RM(weight,reps){if(!weight||!reps||reps<=0)return 0;if(reps===1)ret
 // === PREVIOUS PERFORMANCE ===
 function getPrevPerf(exerciseName,currentWeek){
   if(!allLog||currentWeek<=1)return null;
-  const prev=allLog.filter(r=>r.Exercise===exerciseName&&r.Week==currentWeek-1&&r["Actual Weight"]);
+  const cycleStart=getCycleStartDate();
+  const prev=allLog.filter(r=>r.Exercise===exerciseName&&r.Week==currentWeek-1&&r["Actual Weight"]&&(!r.Date||String(r.Date).slice(0,10)>=cycleStart));
   if(!prev.length)return null;
   return prev.sort((a,b)=>a["Set #"]-b["Set #"]).map(s=>s["Actual Weight"]+'x'+s["Actual Reps"]).join(', ');
 }
@@ -328,7 +343,7 @@ function today(){return new Date().toISOString().split("T")[0];}
 function escapeHtml(s){if(s==null)return'';const t=String(s);return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type==='undo'?' undo':type==='synced'?' synced':'');clearTimeout(t._to);t._to=setTimeout(()=>t.className="toast",2500);}
 function gp(){return allProgram?allProgram.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
-function gl(){return allLog?allLog.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
+function gl(){if(!allLog)return[];const cycleStart=getCycleStartDate();return allLog.filter(r=>r.Week==state.week&&r.Day==state.day&&((r.Date&&String(r.Date).slice(0,10)>=cycleStart)||(!r.Date&&cycleStart==='2000-01-01')));}
 function gm(){return allMetcons?allMetcons.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
 function gn(){return allDayNotes?allDayNotes.find(r=>r.Week==state.week&&r.Day==state.day)||null:null;}
 
@@ -353,18 +368,22 @@ function updateHeader(){
 }
 
 function updateProgress(){
-  const log=gl(),total=log.length,done=log.filter(l=>l["Actual Weight"]).length,pct=total?Math.round(done/total*100):0;document.getElementById("setCount").textContent=done+"/"+total+" sets";document.getElementById("setPct").textContent=pct+"%";const f=document.getElementById("progressFill");f.style.width=pct+"%";f.style.background='';f.className="progress-fill "+(pct===100?"done":"active");
+  const log=gl(),total=log.length,done=log.filter(l=>l["Actual Weight"]).length,pct=total?Math.round(done/total*100):0;
+  const totalVol=log.reduce((sum,l)=>{const w=Number(l["Actual Weight"])||0,r=Number(l["Actual Reps"])||0;return sum+w*r;},0);
+  document.getElementById("setCount").textContent=done+"/"+total+" sets"+(totalVol>0?" \u00B7 "+Math.round(totalVol).toLocaleString()+" lbs":"");
+  document.getElementById("setPct").textContent=pct+"%";const f=document.getElementById("progressFill");f.style.width=pct+"%";f.style.background='';f.className="progress-fill "+(pct===100?"done":"active");
   const syncBtn=document.getElementById("syncBtn");if(syncBtn){const unsynced=hasUnsyncedWorkout();syncBtn.textContent=unsynced?"SYNC \u2022":"SYNC";syncBtn.classList.toggle("unsaved",unsynced);syncBtn.title=unsynced?"You have unsaved sets — tap to sync to sheet":"Sync all sets to Google Sheet";}
+  const ub=document.getElementById("unsyncedBanner");if(ub)ub.style.display=hasUnsyncedWorkout()?"block":"none";
 }
 
 // === REST TIMER ===
-function startRestFn(sec,exName){timers.rest.target=sec;timers.rest.exercise=exName||'';timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');state.restVisible=true;}
+function startRestFn(sec,exName,nextExName){timers.rest.target=sec;timers.rest.exercise=exName||'';timers.rest.nextExercise=nextExName||'';timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');state.restVisible=true;}
 function renderRestDisplay(remaining){
   const el=document.getElementById("restTimer");if(!el)return;el.style.display="flex";
   const ov=remaining<=0,a=Math.abs(remaining),m=Math.floor(a/60),s=a%60;
   el.className="rest-timer "+(ov?"over":"normal");
   const ps=[60,90,120,180,240];
-  el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time">'+(ov?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(timers.rest.exercise?'<div class="rest-exercise">'+escapeHtml(timers.rest.exercise)+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(timers.rest.target===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button class="rest-add30" onclick="addRest30()">+30s</button><button class="rest-skip" onclick="skipRest()">Skip</button><button class="rest-toggle '+(timers.rest.running?'pause':'play')+'" onclick="toggleRestPause()">'+(timers.rest.running?'\u23F8':'\u25B6')+'</button><button class="rest-bell'+(getBellMuted()?' muted':'')+'" onclick="toggleBellMuted()" title="'+(getBellMuted()?'Turn bell on':'Turn bell off')+'">\uD83D\uDD14</button><button class="rest-close" onclick="closeRest()">\u2715</button></div>';
+  el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time">'+(ov?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(timers.rest.exercise?'<div class="rest-exercise">'+escapeHtml(timers.rest.exercise)+'</div>':'')+(timers.rest.nextExercise?'<div class="rest-next">Next: '+escapeHtml(timers.rest.nextExercise)+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(timers.rest.target===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button class="rest-add30" onclick="addRest30()">+30s</button><button class="rest-skip" onclick="skipRest()">Skip</button><button class="rest-toggle '+(timers.rest.running?'pause':'play')+'" onclick="toggleRestPause()">'+(timers.rest.running?'\u23F8':'\u25B6')+'</button><button class="rest-bell'+(getBellMuted()?' muted':'')+'" onclick="toggleBellMuted()" title="'+(getBellMuted()?'Turn bell on':'Turn bell off')+'">\uD83D\uDD14</button><button class="rest-close" onclick="closeRest()">\u2715</button></div>';
 }
 function setRestPreset(s){timers.rest.target=s;timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');}
 function toggleRestPause(){if(timers.rest.running)pauseTimer('rest');else startTimer('rest');}
@@ -469,16 +488,18 @@ function render(){
     card.appendChild(header);
     if(expanded){
       const area=document.createElement("div");area.className="sets-area";
-      area.innerHTML='<div class="set-headers"><div style="width:24px">SET</div><div style="width:62px;text-align:center">TARGET</div><div style="width:58px;text-align:center">LBS</div><div style="width:48px;text-align:center">REPS</div><div style="width:32px;text-align:center">REST</div><div style="width:44px"></div></div>';
+      area.innerHTML='<div class="set-headers"><div style="width:24px">SET</div><div style="width:62px;text-align:center">TARGET</div><div style="width:58px;text-align:center">LBS</div><div style="width:48px;text-align:center">REPS</div><div style="width:32px;text-align:center">REST</div><div style="width:32px"></div><div style="width:44px"></div></div>';
       sets.forEach((s,si)=>{
         const isSaved=!!s["Actual Weight"];const firstEmpty=sets.findIndex(x=>!x["Actual Weight"]);const isActive=si===firstEmpty;
         const tw=s["Target Weight"]||"\u2014";const tr=s["Target Reps"]==="MAX"?"MAX":(s["Target Reps"]||"\u2014");
         const restSec=getRestSec(ex.Exercise,s["Target Reps"],state.week);
-        const wVal=isSaved?s["Actual Weight"]:'';
-        const rVal=isSaved?s["Actual Reps"]:'';
+        const prevW=si>0?sets[si-1]["Actual Weight"]:null;const prevR=si>0?sets[si-1]["Actual Reps"]:null;
+        const wVal=isSaved?s["Actual Weight"]:(isActive&&prevW!=null&&prevW!==""?prevW:'');
+        const rVal=isSaved?s["Actual Reps"]:(isActive&&prevR!=null&&prevR!==""?prevR:'');
+        const showCopy=!isSaved&&si>0&&(sets[si-1]["Actual Weight"]!=null&&sets[si-1]["Actual Weight"]!==""||sets[si-1]["Actual Reps"]!=null&&sets[si-1]["Actual Reps"]!=="");
         const row=document.createElement("div");
         row.className="set-row"+(isSaved?" saved":isActive?" active":"");
-        row.innerHTML='<div class="set-num" style="color:'+(isSaved?'var(--green)':isActive?'var(--accent)':'var(--dim)')+'">'+(si+1)+'</div><div class="set-target">'+tw+'\u00D7'+tr+'</div><input type="number" class="set-input '+(isSaved?'saved':'')+'" id="w_'+i+'_'+si+'" value="'+wVal+'" placeholder="'+(s["Target Weight"]||'lbs')+'" inputmode="numeric"><input type="number" class="set-input reps '+(isSaved?'saved':'')+'" id="r_'+i+'_'+si+'" value="'+rVal+'" placeholder="'+(s["Target Reps"]||'reps')+'" inputmode="numeric"><div class="set-rest-badge">'+fmtRest(restSec)+'</div><button class="set-log-btn '+(isSaved?'saved':'')+'" onclick="toggleSet('+i+','+si+','+(isSaved?'true':'false')+')">'+(isSaved?'\u2713':'\u2192')+'</button>';
+        row.innerHTML='<div class="set-num" style="color:'+(isSaved?'var(--green)':isActive?'var(--accent)':'var(--dim)')+'">'+(si+1)+'</div><div class="set-target">'+tw+'\u00D7'+tr+'</div><input type="number" class="set-input '+(isSaved?'saved':'')+'" id="w_'+i+'_'+si+'" value="'+wVal+'" placeholder="'+(s["Target Weight"]||'lbs')+'" inputmode="numeric"><input type="number" class="set-input reps '+(isSaved?'saved':'')+'" id="r_'+i+'_'+si+'" value="'+rVal+'" placeholder="'+(s["Target Reps"]||'reps')+'" inputmode="numeric"><div class="set-rest-badge">'+fmtRest(restSec)+'</div>'+(showCopy?'<button type="button" class="set-copy-btn" onclick="copyPrevSet('+i+','+si+')" title="Copy previous set">Copy</button>':'<div style="width:32px"></div>')+'<button class="set-log-btn '+(isSaved?'saved':'')+'" onclick="toggleSet('+i+','+si+','+(isSaved?'true':'false')+')">'+(isSaved?'\u2713':'\u2192')+'</button>';
         area.appendChild(row);
       });
       // Est 1RM for big lifts
@@ -569,6 +590,13 @@ function render(){
   const nc=document.createElement("div");nc.className="day-notes-card";
   nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div></div><div class="day-notes-prompts"><div class="day-notes-prompt" onclick="insertPrompt(\'Energy level:\')">'+'\u26A1 Energy</div><div class="day-notes-prompt" onclick="insertPrompt(\'Sleep:\')">'+'\uD83D\uDE34 Sleep</div><div class="day-notes-prompt" onclick="insertPrompt(\'Body weight:\')">'+'\u2696\uFE0F Weight</div><div class="day-notes-prompt" onclick="insertPrompt(\'Pain/tightness:\')">'+'\uD83D\uDD34 Pain</div><div class="day-notes-prompt" onclick="insertPrompt(\'Form notes:\')">'+'\uD83D\uDCCB Form</div><div class="day-notes-prompt" onclick="insertPrompt(\'Next session:\')">'+'\u27A1\uFE0F Next</div></div><textarea class="day-notes-textarea" id="dayNotesText" placeholder="How did the session go? Energy, sleep, bodyweight, anything that felt off, PRs, adjustments...">'+escapeHtml(noteText)+'</textarea><button class="day-notes-save-btn" id="dayNotesSaveBtn" onclick="saveDayNotes()">SAVE NOTES</button>';
   content.appendChild(nc);
+
+  // === START NEW CYCLE (when on W4 D4) ===
+  if(state.week===4&&state.day===4){
+    const cycleCard=document.createElement("div");cycleCard.className="cycle-card";
+    cycleCard.innerHTML='<div class="cycle-title">4-week cycle complete</div><div class="cycle-desc">Start a new cycle with the same program. Sync first to save this cycle to the sheet.</div><button type="button" class="cycle-btn" onclick="startNewCycle()">Start new cycle</button>';
+    content.appendChild(cycleCard);
+  }
 }
 
 function insertPrompt(text){const ta=document.getElementById('dayNotesText');if(!ta)return;const cur=ta.value;const pfx=cur&&!cur.endsWith('\n')&&!cur.endsWith(' ')?'\n':'';ta.value=cur+pfx+text+' ';ta.focus();}
@@ -608,9 +636,27 @@ function toggleSet(exIdx,setIdx,currentlySaved){
     if(allSetsDone&&exIdx<exercises.length-1){state.expandedEx=exIdx+1;saveExpanded();}
     saveLocalLog();render();toast("Set logged \u2713");
     const restSec=getRestSec(ex.Exercise,s["Target Reps"],state.week);
-    startRestFn(restSec,ex.Exercise);
+    const nextEx=exercises[exIdx+1]?exercises[exIdx+1].Exercise:'';
+    startRestFn(restSec,ex.Exercise,nextEx);
+    const nextExIdx=allSetsDone&&exIdx<exercises.length-1?exIdx+1:exIdx;
+    const nextSetIdx=allSetsDone&&exIdx<exercises.length-1?0:setIdx+1;
+    setTimeout(()=>{const nw=document.getElementById('w_'+nextExIdx+'_'+nextSetIdx);if(nw)nw.focus();},150);
   }
   state.saving[sk]=false;
+}
+
+function copyPrevSet(exIdx,setIdx){
+  const program=gp(),log=gl(),exercises=[],seen=new Set();
+  program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
+  const ex=exercises[exIdx];const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
+  if(setIdx===0)return;
+  const prev=sets[setIdx-1];
+  const w=prev["Actual Weight"]!=null&&prev["Actual Weight"]!==""?prev["Actual Weight"]:'';
+  const r=prev["Actual Reps"]!=null&&prev["Actual Reps"]!==""?prev["Actual Reps"]:'';
+  const wInp=document.getElementById('w_'+exIdx+'_'+setIdx);const rInp=document.getElementById('r_'+exIdx+'_'+setIdx);
+  if(wInp){wInp.value=w;wInp.focus();}
+  if(rInp)rInp.value=r;
+  haptic(10);toast("Copied previous set");
 }
 
 async function syncWorkoutToSheet(){
@@ -624,7 +670,7 @@ async function syncWorkoutToSheet(){
   }
   try{localStorage.removeItem(LS_LOG_PREFIX+state.week+'_'+state.day);}catch(e){}
   btn.classList.remove('syncing');btn.textContent='SYNC';
-  if(failCount===0)toast("Synced "+okCount+" sets to sheet");
+  if(failCount===0){haptic(50);toast("Synced "+okCount+" sets to sheet");}
   else if(okCount>0)toast(failCount+" failed \u2014 tap SYNC again to retry","undo");
   else toast("Offline \u2014 tap SYNC again when back online","undo");
 }
@@ -641,6 +687,17 @@ let pullStart=0,pulling=false;
 document.addEventListener('touchstart',e=>{if(window.scrollY===0)pullStart=e.touches[0].clientY;},{passive:true});
 document.addEventListener('touchmove',e=>{if(pullStart>0){const d=e.touches[0].clientY-pullStart;if(d>60&&!pulling){pulling=true;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='\u2B07 Release to refresh';pi.style.height='30px';}}}},{passive:true});
 document.addEventListener('touchend',()=>{if(pulling){pulling=false;pullStart=0;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='Refreshing… (local data kept)';pi.style.height='30px';}initialLoad().then(()=>{if(pi){pi.textContent='';pi.style.height='0';}});}else{pullStart=0;}},{passive:true});
+
+async function startNewCycle(){
+  for(let w=1;w<=4;w++)for(let d=1;d<=4;d++){try{localStorage.removeItem(LS_LOG_PREFIX+w+'_'+d);localStorage.removeItem(LS_EXPANDED+w+'_'+d);}catch(e){}}
+  state.week=1;state.day=1;state.expandedEx=0;state._clearConfirm=null;
+  const cycleStart=today();
+  saveCycleStartDate(cycleStart);
+  saveView();
+  try{const r=await fetch(API+"?action=getLog");allLog=await r.json();}catch(e){}
+  buildNav();render();
+  toast("New cycle started — previous data stays in the sheet");
+}
 
 initialLoad();
 </script>

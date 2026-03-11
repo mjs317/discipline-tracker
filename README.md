@@ -1,6 +1,6 @@
 # Discipline Tracker
 
-Jocko-style workout tracker PWA for the 4-week program (4 days per week). Log sets on your phone at the gym, then sync to a Google Sheet when you’re done.
+Jocko-style workout tracker PWA for the 4-week program (4 days per week). Log sets on your phone at the gym, then sync to a Google Sheet when you're done.
 
 ## Features
 
@@ -36,4 +36,17 @@ Host the repo as static files (e.g. GitHub Pages, Netlify, Vercel). The app is a
 
 ## PWA icons
 
-The app references `favicon.png`, `icon-180.png`, and in the manifest `icon-192.png` and `icon-512.png`. Add these files for “Add to Home Screen” and app icons, or remove/update the `<link>` tags and `manifest.json` icons if you don’t need them.
+The app references `favicon.png`, `icon-180.png`, and in the manifest `icon-192.png` and `icon-512.png`. Add these files for "Add to Home Screen" and app icons, or remove/update the `<link>` tags and `manifest.json` icons if you don't need them.
+
+## Starting a new cycle
+
+When you finish the 4 weeks (Week 4, Day 4), a **Start new cycle** card appears at the bottom. Tap it to clear local workout data, return to Week 1 Day 1, and refetch the log. Your previous cycle stays on the sheet (each row has a date). To archive: in Google Sheets, copy the Log sheet to e.g. Log_Archive_2025-01 and optionally clear the Log sheet for a clean slate. The program (exercises) is unchanged.
+
+### How the sheet keeps old and new cycle data
+
+The app sends **Date** (workout date, e.g. `YYYY-MM-DD`) with every set when you sync. For old and new cycles to coexist, the **Google Apps Script** must treat **Date** as part of the row identity:
+
+- When **writing** a set (`logSet`): find a row by **(Week, Day, Date, Exercise, Set #)**. If found, update that row; if not found, **append** a new row. Do not find by (Week, Day, Exercise, Set #) only, or the next cycle would overwrite the previous one.
+- When **reading** the log (`getLog`): return all rows. The app filters to the current cycle (rows with Date on or after the cycle start date).
+
+So the Log sheet will have multiple rows for the same Week/Day/Exercise/Set with different Date values—one row per cycle per set. No data is overwritten.
