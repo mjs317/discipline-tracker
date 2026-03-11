@@ -41,6 +41,9 @@ button{font-family:inherit}
 .progress-fill.done{background:var(--green)}.progress-fill.active{background:var(--accent)}
 .ctrl-btn{background:rgba(255,255,255,0.08);border:none;border-radius:8px;color:#fff;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Mono',monospace}
 .ctrl-btn.running{background:rgba(139,0,0,0.3);border:1px solid var(--accent)}
+.sync-btn{background:rgba(45,106,79,0.25);color:var(--green-light)}
+.sync-btn.syncing{opacity:0.8;pointer-events:none}
+.sync-btn:active{background:rgba(45,106,79,0.4)}
 .content{padding:12px 12px 100px}
 .exercise-card{background:var(--card);border-radius:12px;margin-bottom:6px;overflow:hidden;border:1px solid var(--border)}
 .exercise-card.expanded{background:var(--card-active);border-color:rgba(139,0,0,0.25)}
@@ -151,7 +154,7 @@ button{font-family:inherit}
 <div class="header">
 <div class="header-top"><div><div class="week-label" id="weekLabel">WEEK 1 — DISCIPLINE</div><div class="day-title" id="dayTitle">Loading...</div></div><div class="gear-badge gear-gym" id="gearBadge">—</div></div>
 <div class="nav-grid" id="navGrid"></div>
-<div class="progress-row"><div class="progress-bar-wrap"><div class="progress-info"><span id="setCount">0/0 sets</span><span id="setPct">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div><button class="ctrl-btn" id="workoutTimer" onclick="toggleWorkoutTimer()">START</button></div>
+<div class="progress-row"><div class="progress-bar-wrap"><div class="progress-info"><span id="setCount">0/0 sets</span><span id="setPct">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div><button class="ctrl-btn" id="workoutTimer" onclick="toggleWorkoutTimer()">START</button><button class="ctrl-btn sync-btn" id="syncBtn" onclick="syncWorkoutToSheet()" title="Sync all sets to Google Sheet">SYNC</button></div>
 </div>
 <div id="pullIndicator" class="pull-indicator" style="height:0;overflow:hidden"></div>
 <div class="content" id="content"></div>
@@ -172,7 +175,17 @@ const WEEK_NAMES={1:"DISCIPLINE",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"}
 const DAY_MAP={1:"D1",2:"D2",3:"D3",4:"D4"};
 let allProgram=null,allLog=null,allMetcons=null,allDayNotes=null,dataLoaded=false;
 
-// === WAKE LOCK ===
+const LS_LOG_PREFIX='disc_log_';
+function saveLocalLog(){if(!allLog)return;try{localStorage.setItem(LS_LOG_PREFIX+state.week+'_'+state.day,JSON.stringify(gl()));}catch(e){}}
+function mergeLocalLogIntoAllLog(){
+  if(!allLog)return;
+  for(let w=1;w<=4;w++)for(let d=1;d<=4;d++){
+    try{const raw=localStorage.getItem(LS_LOG_PREFIX+w+'_'+d);if(!raw)continue;
+    const rows=JSON.parse(raw);if(!Array.isArray(rows)||!rows.length)continue;
+    allLog=allLog.filter(r=>!(r.Week==w&&r.Day==d)).concat(rows);
+    }catch(e){}
+  }
+}
 let wakeLock=null;
 async function acquireWakeLock(){try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}catch(e){}}
 function releaseWakeLock(){if(wakeLock){wakeLock.release();wakeLock=null;}}
@@ -315,7 +328,7 @@ function resetMetconState(){state.mcRunning=false;state.mcFinished=false;state.m
 async function initialLoad(){
   document.getElementById("content").innerHTML='<div class="skel"><div class="skel-bar" style="width:65%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:50%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:70%"></div><div class="skel-bar short"></div></div>';
   buildNav();
-  try{const[pR,lR,mR,nR]=await Promise.all([fetch(API+"?action=getProgram"),fetch(API+"?action=getLog"),fetch(API+"?action=getMetcons"),fetch(API+"?action=getDayNotes")]);const[pD,lD,mD,nD]=await Promise.all([pR.json(),lR.json(),mR.json(),nR.json()]);allProgram=pD;allLog=lD;allMetcons=mD;allDayNotes=nD;dataLoaded=true;render();}
+  try{const[pR,lR,mR,nR]=await Promise.all([fetch(API+"?action=getProgram"),fetch(API+"?action=getLog"),fetch(API+"?action=getMetcons"),fetch(API+"?action=getDayNotes")]);const[pD,lD,mD,nD]=await Promise.all([pR.json(),lR.json(),mR.json(),nR.json()]);allProgram=pD;allLog=lD;allMetcons=mD;allDayNotes=nD;mergeLocalLogIntoAllLog();dataLoaded=true;render();}
   catch(e){document.getElementById("content").innerHTML='<div class="error-msg">Could not reach the sheet. Check connection and refresh.</div>';console.error(e);}
 }
 
@@ -547,35 +560,51 @@ async function saveDayNotes(){
   setTimeout(()=>{btn.textContent='SAVE NOTES';btn.className='day-notes-save-btn';btn.disabled=false;},2500);
 }
 
-// === TOGGLE LOG/UNLOG ===
-async function toggleSet(exIdx,setIdx,currentlySaved){
+// === TOGGLE LOG / EDIT / CLEAR (local only; use SYNC to push to sheet) ===
+function toggleSet(exIdx,setIdx,currentlySaved){
   const sk=exIdx+'_'+setIdx;if(state.saving[sk])return;
   const program=gp(),log=gl(),exercises=[],seen=new Set();
   program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
   const ex=exercises[exIdx];
   const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
   const s=sets[setIdx];state.saving[sk]=true;haptic(15);
+  const wInp=document.getElementById('w_'+exIdx+'_'+setIdx),rInp=document.getElementById('r_'+exIdx+'_'+setIdx);
+  const wVal=wInp?Number(wInp.value)||0:0,rVal=rInp?Number(rInp.value)||0:0;
   if(currentlySaved){
-    const ow=s["Actual Weight"],or2=s["Actual Reps"];
-    s["Actual Weight"]="";s["Actual Reps"]="";render();toast("Set cleared \u21A9","undo");
-    const ok=await apiWrite({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:"",weight:"",reps:""});
-    if(!ok){s["Actual Weight"]=ow;s["Actual Reps"]=or2;render();}
+    const savedW=Number(s["Actual Weight"])||0,savedR=Number(s["Actual Reps"])||0;
+    if(wVal!==savedW||rVal!==savedR){
+      s["Actual Weight"]=wVal;s["Actual Reps"]=rVal;s["Date"]=wVal||rVal?today():"";
+      saveLocalLog();render();toast("Updated \u2713");
+    }else{
+      s["Actual Weight"]="";s["Actual Reps"]="";s["Date"]="";
+      saveLocalLog();render();toast("Set cleared \u21A9","undo");
+    }
   }else{
-    const w=document.getElementById('w_'+exIdx+'_'+setIdx).value;
-    const r=document.getElementById('r_'+exIdx+'_'+setIdx).value;
-    if(!w&&!r){state.saving[sk]=false;return;}
-    s["Actual Weight"]=Number(w)||0;s["Actual Reps"]=Number(r)||0;
-    // Auto-advance: if all sets done on this exercise, expand next
-    const allSetsDone=sets.every(ss=>ss["Actual Weight"]);
+    if(!wVal&&!rVal){state.saving[sk]=false;return;}
+    s["Actual Weight"]=wVal;s["Actual Reps"]=rVal;s["Date"]=today();
+    const allSetsDone=sets.every(ss=>ss["Actual Weight"]!=null&&ss["Actual Weight"]!==""||ss["Actual Reps"]!=null&&ss["Actual Reps"]!=="");
     if(allSetsDone&&exIdx<exercises.length-1)state.expandedEx=exIdx+1;
-    render();toast("Set logged \u2713");
+    saveLocalLog();render();toast("Set logged \u2713");
     const restSec=getRestSec(ex.Exercise,s["Target Reps"],state.week);
     startRestFn(restSec,ex.Exercise);
-    const ok=await apiWrite({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:today(),weight:Number(w)||0,reps:Number(r)||0});
-    if(ok)toast("Synced to sheet");
-    if(!ok){/* stays in queue, UI already updated optimistically */}
   }
   state.saving[sk]=false;
+}
+
+async function syncWorkoutToSheet(){
+  const btn=document.getElementById('syncBtn');if(!btn||btn.classList.contains('syncing'))return;
+  const rows=gl();if(!rows.length){toast("No sets to sync");return;}
+  btn.classList.add('syncing');btn.textContent='Syncing…';
+  let okCount=0,failCount=0;
+  for(const row of rows){
+    const payload={action:"logSet",week:row.Week,day:row.Day,exercise:row.Exercise,setNum:row["Set #"],date:row["Date"]||"",weight:row["Actual Weight"]!=null&&row["Actual Weight"]!==""?Number(row["Actual Weight"])||0:"",reps:row["Actual Reps"]!=null&&row["Actual Reps"]!==""?Number(row["Actual Reps"])||0:""};
+    const ok=await apiWrite(payload);if(ok)okCount++;else failCount++;
+  }
+  try{localStorage.removeItem(LS_LOG_PREFIX+state.week+'_'+state.day);}catch(e){}
+  btn.classList.remove('syncing');btn.textContent='SYNC';
+  if(failCount===0)toast("Synced "+okCount+" sets to sheet");
+  else if(okCount>0)toast(okCount+" synced, "+failCount+" queued (offline)");
+  else toast("Offline — will sync when back online");
 }
 
 // === WORKOUT TIMER ===
