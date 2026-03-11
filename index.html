@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--accent:#8B0000;--dark:#141414;--card:#1c1c1c;--card-active:#241a1a;--green:#2d6a4f;--green-light:#40916c;--med:#999;--dim:#555;--yellow:#e6c200;--border:rgba(255,255,255,0.06);--flex:#1a5fb4;--flex-light:#5b9bd5}
+:root{--accent:#8B0000;--dark:#141414;--card:#1c1c1c;--card-active:#241a1a;--green:#2d6a4f;--green-light:#40916c;--med:#999;--dim:#555;--yellow:#e6c200;--border:rgba(255,255,255,0.06)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;background:var(--dark);color:#fff;min-height:100dvh;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom,0);overscroll-behavior-y:contain}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
@@ -50,16 +50,16 @@ button{font-family:inherit}
 .ex-prev{font-size:10px;color:var(--med);margin-top:3px;font-family:'DM Mono',monospace}
 .sets-area{padding:0 10px 12px}
 .set-headers{display:flex;gap:6px;font-size:9px;color:var(--dim);letter-spacing:0.1em;margin-bottom:6px;padding:0 8px}
-.set-row{display:flex;gap:6px;align-items:center;padding:6px 8px;border-radius:8px;margin-bottom:3px;border:1px solid transparent}
+.set-row{display:flex;gap:8px;align-items:center;padding:8px 10px;border-radius:8px;margin-bottom:4px;border:1px solid transparent;min-height:44px}
 .set-row.active{background:rgba(139,0,0,0.08);border-color:rgba(139,0,0,0.25)}
 .set-row.saved{background:rgba(45,106,79,0.06)}
 .set-num{width:24px;font-size:13px;font-weight:700;text-align:center;font-family:'DM Mono',monospace}
 .set-target{width:62px;font-size:11px;color:var(--dim);font-family:'DM Mono',monospace;text-align:center}
-.set-input{width:58px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px;color:#fff;font-size:14px;font-family:'DM Mono',monospace;text-align:center;outline:none}
-.set-input.reps{width:46px}
+.set-input{width:58px;min-height:44px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 6px;color:#fff;font-size:16px;font-family:'DM Mono',monospace;text-align:center;outline:none}
+.set-input.reps{width:48px}
 .set-input.saved{background:transparent;border-color:transparent}
 .set-rest-badge{font-size:9px;color:var(--dim);font-family:'DM Mono',monospace;width:32px;text-align:center}
-.set-log-btn{width:36px;height:36px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;background:var(--accent);color:#fff;flex-shrink:0}
+.set-log-btn{min-width:44px;min-height:44px;width:44px;height:44px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;background:var(--accent);color:#fff;flex-shrink:0}
 .set-log-btn.saved{background:rgba(45,106,79,0.15);color:var(--green-light)}
 .set-log-btn:active{transform:scale(0.95)}
 .form-note{margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(139,0,0,0.08);font-size:11px;color:var(--yellow);line-height:1.5}
@@ -128,14 +128,14 @@ button{font-family:inherit}
 .rest-exercise{font-size:10px;color:rgba(255,255,255,0.7);margin-top:1px;font-weight:500}
 .rest-time{font-size:28px;font-weight:800;font-family:'DM Mono',monospace}
 .rest-controls{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-.rest-preset{background:rgba(255,255,255,0.1);border:none;border-radius:6px;color:#fff;padding:5px 8px;font-size:11px;cursor:pointer;font-family:'DM Mono',monospace}
+.rest-preset{background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:8px 12px;min-height:44px;font-size:12px;cursor:pointer;font-family:'DM Mono',monospace;display:inline-flex;align-items:center;justify-content:center}
 .rest-preset.active-preset{background:rgba(255,255,255,0.25)}
-.rest-toggle{border:none;border-radius:6px;color:#fff;padding:5px 10px;font-size:12px;cursor:pointer;font-weight:700}
+.rest-toggle{border:none;border-radius:8px;color:#fff;padding:8px 14px;min-height:44px;font-size:13px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
 .rest-toggle.pause{background:rgba(255,255,255,0.2)}.rest-toggle.play{background:var(--green)}
-.rest-close{background:rgba(255,255,255,0.1);border:none;border-radius:6px;color:#fff;padding:5px 8px;font-size:12px;cursor:pointer}
+.rest-close{background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:#fff;padding:8px 12px;min-height:44px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
 .loading{text-align:center;padding:60px 20px;color:var(--dim);font-size:14px}
 .error-msg{text-align:center;padding:60px 20px;color:var(--accent);font-size:14px;line-height:1.6}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:200;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast{position:fixed;top:max(20px,env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;z-index:200;opacity:0;transition:opacity 0.3s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.4)}
 .toast.show{opacity:1}.toast.undo{background:#b85c00}
 .skel{background:var(--card);border-radius:12px;margin-bottom:6px;padding:16px 14px;border:1px solid var(--border)}
 .skel-bar{height:14px;border-radius:4px;background:rgba(255,255,255,0.04);animation:pulse 1.2s ease-in-out infinite}
@@ -143,40 +143,10 @@ button{font-family:inherit}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 .pull-indicator{text-align:center;padding:8px;font-size:11px;color:var(--dim);transition:all 0.2s}
 .offline-badge{position:fixed;top:8px;right:8px;background:#b85c00;color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;z-index:300;display:none}
-/* === FLEX 3.0 STYLES === */
-.prog-toggle{display:flex;gap:4px;margin-bottom:8px}
-.prog-btn{flex:1;padding:6px 0;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.06em;background:rgba(255,255,255,0.05);color:var(--dim);transition:background 0.15s}
-.prog-btn.active-j{background:var(--accent);color:#fff}
-.prog-btn.active-f{background:var(--flex);color:#fff}
-.flex-nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.flex-nav::-webkit-scrollbar{display:none}
-.flex-day-btn{flex-shrink:0;min-width:34px;padding:5px 4px;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.04);color:var(--dim);font-family:'DM Mono',monospace}
-.flex-day-btn.active{background:var(--flex);color:#fff}
-.flex-day-btn.fdone{background:rgba(26,95,180,0.2);color:var(--flex-light)}
-.flex-block{background:var(--card);border-radius:12px;margin-bottom:8px;border:1px solid var(--border);overflow:hidden}
-.flex-block.bdone{border-color:rgba(26,95,180,0.35);background:#161c26}
-.flex-block-top{padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.flex-blabel{font-size:10px;color:var(--flex-light);font-weight:700;letter-spacing:0.1em}
-.flex-bsets{font-size:11px;color:var(--dim);margin-top:2px}
-.flex-exlist{padding:2px 14px 14px;font-size:13px;color:var(--med);line-height:1.7}
-.flex-exline{padding:2px 0}
-.flex-exline.is-rest{color:var(--dim);font-size:11px;font-style:italic;padding-left:10px}
-.flex-exline.is-emom{color:#4dabf7;font-size:12px;font-weight:600}
-.flex-done-btn{border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.flex-done-btn.unc{background:rgba(26,95,180,0.15);color:var(--flex-light);border:1px solid rgba(26,95,180,0.25)}
-.flex-done-btn.chk{background:rgba(26,95,180,0.1);color:var(--flex-light);border:1px solid rgba(26,95,180,0.2)}
-.flex-done-btn:active{transform:scale(0.95)}
-.flex-schedule{background:rgba(26,95,180,0.07);border:1px solid rgba(26,95,180,0.18);border-radius:12px;padding:14px;margin-bottom:10px}
-.flex-sch-label{font-size:10px;color:var(--flex-light);font-weight:700;letter-spacing:0.1em;margin-bottom:8px}
-.flex-sch-row{display:flex;gap:8px;align-items:center}
-.flex-date-inp{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 10px;color:#fff;font-size:13px;font-family:'DM Mono',monospace;outline:none;flex:1;min-width:0;color-scheme:dark}
-.flex-sch-btn{background:var(--flex);border:none;border-radius:8px;color:#fff;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
-.flex-sch-info{font-size:12px;color:var(--med);margin-top:8px;line-height:1.5}
-.flex-complete-banner{text-align:center;padding:20px 16px;background:rgba(26,95,180,0.08);border-radius:12px;border:1px solid rgba(26,95,180,0.2);margin-bottom:10px}
 </style>
 </head>
 <body>
-<div id="offlineBadge" class="offline-badge">OFFLINE — QUEUED</div>
+<div id="offlineBadge" class="offline-badge">OFFLINE — Will sync when back online</div>
 <div id="toast" class="toast"></div>
 <div class="header">
 <div class="header-top"><div><div class="week-label" id="weekLabel">WEEK 1 — DISCIPLINE</div><div class="day-title" id="dayTitle">Loading...</div></div><div class="gear-badge gear-gym" id="gearBadge">—</div></div>
@@ -324,168 +294,10 @@ function getMetconConfig(metcon){
 let state={week:1,day:1,expandedEx:0,workoutRunning:false,restVisible:false,
   mcType:'fortime',mcRunning:false,mcFinished:false,mcCapSec:0,mcExpectedRounds:0,
   mcSplits:[],mcRoundCount:0,mcEmomMoves:null,mcCountdown:0,mcCountdownActive:false,
-  _lastMcSec:-1,saving:{},program:'jocko',flexDay:1};
-
-// === FLEX 3.0 PROGRAM DATA ===
-const FLEX_DAYS=[
-  {day:1,title:"LOWER BODY",blocks:[
-    {label:"FLEX STRENGTH",sets:"—",exercises:["Build to a 3-Rep Front Squat"]},
-    {label:"FLEX BODYBUILDING 1",sets:"3 sets",exercises:["8 reps Tempo Heels Elevated Back Squat","1 min Rest","8 reps Hamstring Curl On Rower"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2 sets",exercises:["15 reps Medicine Ball Glute Bridge","1 min Rest","20 reps Alt DB Reverse Lunge (Moderate)"]}
-  ]},
-  {day:2,title:"PULL + LEGS",blocks:[
-    {label:"FLEX STRENGTH 1",sets:"—",exercises:["Build to a 3-Rep Max Weighted Pull-Up"]},
-    {label:"FLEX STRENGTH 2",sets:"—",exercises:["Build to a 3-Rep Max Deadlift"]}
-  ]},
-  {day:3,title:"PUSH",blocks:[
-    {label:"FLEX STRENGTH",sets:"—",exercises:["Build to a 3-Rep Max Bench Press"]},
-    {label:"FLEX BODYBUILDING 1",sets:"3-4 sets",exercises:["6 reps Incline DB Bench Press"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["15 reps DB Lateral Raises","1 min Rest","Max Reps Prone DB Reverse Flyes"]},
-    {label:"FLEX BODYBUILDING 3",sets:"2 sets",exercises:["12 reps DB Skull Crushers","1 min Rest","15 reps Incline DB Hammer Curls"]}
-  ]},
-  {day:4,title:"FRONT SQUAT + LEGS",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Front Squat (30X0)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2-3 sets",exercises:["10/10 reps Single KB Offset Reverse Lunge","90s Rest","8/8 reps Single-Leg Hamstring Curl on Medicine Ball"]},
-    {label:"FLEX BODYBUILDING 2",sets:"3 sets",exercises:["12 reps Barbell RDL"]},
-    {label:"FLEX BODYBUILDING 3",sets:"2-3 sets",exercises:["20 reps Heels-Elevated KB Goblet Squats","90s Rest","15 reps Reverse Crunches"]}
-  ]},
-  {day:5,title:"PULL-UPS + PUSH/PULL",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Weighted Pull-Ups"]},
-    {label:"FLEX BODYBUILDING 1",sets:"AMRAP × 5 min",exercises:["5 min AMRAP Strict Pull-Ups"]},
-    {label:"FLEX BODYBUILDING 2",sets:"3-4 sets",exercises:["12 reps 1+1/4 DB Bench Press","90s Rest","16 reps Barbell Bent Over Row"]},
-    {label:"FLEX BODYBUILDING 3",sets:"3 sets",exercises:["12/12 reps Single-Arm Landmine Row","1 min Rest","16 reps Incline DB Bench","1 min Rest","20 reps Banded Straight-Arm Pulldown"]}
-  ]},
-  {day:6,title:"SHOULDERS + ARMS",blocks:[
-    {label:"FLEX STRENGTH",sets:"3 sets",exercises:["6 reps Seated DB Shoulder Press (Heavy)","15s Rest","12 reps Seated DB Rear Delt Fly (Moderate)","15s Rest","25 reps DB Lateral Raise (Light-Moderate)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2-3 sets",exercises:["6 reps Weighted Chin-Up (Heavy)","15s Rest","12 reps Supinated Grip DB Curls (Moderate)","15s Rest","25 reps KB Horn Curls (Light-Moderate)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["12 reps DB Cuban Press","90s Rest","16 reps Barbell Upright Rows"]}
-  ]},
-  {day:7,title:"DEADLIFT + LEGS + CORE",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Deadlifts"]},
-    {label:"FLEX BODYBUILDING 1",sets:"3 sets",exercises:["12/12 reps Zercher Reverse Lunge (Heavy)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["16 reps DB Romanian Deadlift","90s Rest","20 reps DB Goblet Cossack Squat"]},
-    {label:"FLEX BODYBUILDING 3",sets:"EMOM × 12 min",exercises:["Min 1: Max-Set Hanging Knee Raises","Min 2: Max-Set Kipping Toes To Bar","Min 3: Rest"]}
-  ]},
-  {day:8,title:"BENCH PRESS + PUSH",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Bench Press (30X0)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2 sets",exercises:["Max Reps Bench Press"]},
-    {label:"FLEX BODYBUILDING 2",sets:"3-4 sets",exercises:["12 reps Incline DB Bench Press","90s Rest","16 reps Bent Over DB Row"]},
-    {label:"FLEX BODYBUILDING 3",sets:"2 sets",exercises:["8 reps Weighted Bar Dip (Heavy)"]},
-    {label:"FLEX BODYBUILDING 4",sets:"2 sets",exercises:["Max Set Bodyweight Bar Dips"]},
-    {label:"FLEX BODYBUILDING 5",sets:"EMOM × 8 min",exercises:["Min 1: Max Set Deficit Push-Ups","Min 2: Max Set Inverted Rows"]}
-  ]},
-  {day:9,title:"FRONT SQUAT + LEGS + CORE",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Front Squat (30X0)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2-3 sets",exercises:["10/10 reps DB Split Squat (Heavy)","90s Rest","12 reps Hamstring Curl on Rower"]},
-    {label:"FLEX BODYBUILDING 2",sets:"3 sets",exercises:["12/12 reps Landmine Single-Leg Deadlift (Heavy)"]},
-    {label:"FLEX BODYBUILDING 3",sets:"2-3 sets",exercises:["Max Set Hanging Knee Raises","90s Rest","15 reps Reverse Crunches"]}
-  ]},
-  {day:10,title:"PULL-UPS + PULL",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Weighted Pull-Ups"]},
-    {label:"FLEX BODYBUILDING 1",sets:"3-4 sets",exercises:["10 reps Deficit Pendlay Row (Heavy)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"EMOM × 10 min",exercises:["Min 1: Max Set Pull-Ups (Moderate)","Min 2: Max Reps Bar or Ring Dips"]},
-    {label:"FLEX BODYBUILDING 3",sets:"3 sets",exercises:["12/12 reps Single-Arm DB Row","1 min Rest","16 reps Incline DB Bench","1 min Rest","20 reps DB Top Down Gorilla Row"]}
-  ]},
-  {day:11,title:"SHOULDERS + ARMS",blocks:[
-    {label:"FLEX STRENGTH",sets:"2-3 sets",exercises:["12 reps Seated DB Shoulder Press (Myo Reps)","2 min Rest","15 reps DB Lateral Raise"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2-3 sets",exercises:["8 reps Close-Grip Bench Press (Heavy)","15s Rest","12 reps DB Floor Press (Moderate)","15s Rest","25 reps DB Skull Crushers (Light-Moderate)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["20 reps Alt Pronated Grip DB Strict Press","90s Rest","16 reps Seated DB Rear Delt Fly"]}
-  ]},
-  {day:12,title:"DEADLIFT + LEGS + CORE",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Deadlifts"]},
-    {label:"FLEX BODYBUILDING 1",sets:"4 sets",exercises:["12/12 reps DB Bulgarian Split Squats (Heavy)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["10/10 reps Single DB Split Stance RDL","90s Rest","20 reps DB Walking Lunges"]},
-    {label:"FLEX BODYBUILDING 3",sets:"EMOM × 8 min",exercises:["Min 1: Max Set Hanging Knee Raises","Min 2: 12-16 Weighted Sit-Ups"]}
-  ]},
-  {day:13,title:"DEADLIFT + LEGS + CORE",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Deadlifts"]},
-    {label:"FLEX BODYBUILDING 1",sets:"4 sets",exercises:["12/12 reps DB Bulgarian Split Squats (Heavy)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["10/10 reps Single DB Split Stance RDL","90s Rest","20 reps DB Walking Lunges"]},
-    {label:"FLEX BODYBUILDING 3",sets:"EMOM × 8 min",exercises:["Min 1: Max Set Hanging Knee Raises","Min 2: 12-16 Weighted Sit-Ups"]}
-  ]},
-  {day:14,title:"BENCH + PUSH/PULL",blocks:[
-    {label:"FLEX STRENGTH",sets:"8 sets",exercises:["3 Bench Press (30X0)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"3-4 sets",exercises:["10 reps Slight Incline DB Bench (Heavy)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"EMOM × 12 min",exercises:["Min 1: 8-10 Neutral Grip DB Bench (Moderate)","Min 2: Max Set Chin-Ups"]},
-    {label:"FLEX BODYBUILDING 3",sets:"3 sets",exercises:["16 reps Weighted Bar Dip (Moderate)","1 min Rest","16 reps Pendlay Row (Moderate)","1 min Rest","1:00 Max Reps Deficit Push-Ups"]}
-  ]},
-  {day:15,title:"FRONT SQUAT + LEGS",blocks:[
-    {label:"FLEX STRENGTH",sets:"6 sets",exercises:["4 Front Squat (30X0)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2-3 sets",exercises:["10/10 reps Single KB Offset Reverse Lunge","90s Rest","8/8 reps Single-Leg Hamstring Curl on Medicine Ball"]},
-    {label:"FLEX BODYBUILDING 2",sets:"3 sets",exercises:["12 reps Barbell RDL (Heavy)"]},
-    {label:"FLEX BODYBUILDING 3",sets:"2-3 sets",exercises:["20 reps Heels-Elevated KB Goblet Squats","90s Rest","15 reps Reverse Crunches"]}
-  ]},
-  {day:16,title:"PULL-UPS + PUSH/PULL",blocks:[
-    {label:"FLEX STRENGTH",sets:"6 sets",exercises:["4 Weighted Pull-Ups"]},
-    {label:"FLEX BODYBUILDING 1",sets:"AMRAP × 5 min",exercises:["5 min AMRAP Strict Pull-Ups"]},
-    {label:"FLEX BODYBUILDING 2",sets:"3-4 sets",exercises:["12 reps 1+1/4 DB Bench Press","90s Rest","16 reps Barbell Bent Over Row"]},
-    {label:"FLEX BODYBUILDING 3",sets:"3 sets",exercises:["12/12 reps Single-Arm Landmine Row","1 min Rest","16 reps Incline DB Bench","1 min Rest","20 reps Banded Straight-Arm Pulldown"]}
-  ]},
-  {day:17,title:"SHOULDERS + ARMS",blocks:[
-    {label:"FLEX STRENGTH",sets:"3 sets",exercises:["6 reps Seated DB Shoulder Press (Heavy)","15s Rest","12 reps Seated DB Rear Delt Fly (Moderate)","15s Rest","25 reps DB Lateral Raise (Light-Moderate)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2-3 sets",exercises:["6 reps Weighted Chin-Up (Heavy)","15s Rest","12 reps Supinated Grip DB Curls (Moderate)","15s Rest","25 reps KB Horn Curls (Light-Moderate)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["12 reps DB Cuban Press","90s Rest","16 reps Barbell Upright Rows"]}
-  ]},
-  {day:18,title:"DEADLIFT + LEGS + CORE",blocks:[
-    {label:"FLEX STRENGTH",sets:"6 sets",exercises:["4 Deadlifts"]},
-    {label:"FLEX BODYBUILDING 1",sets:"3 sets",exercises:["12/12 reps Zercher Reverse Lunge (Heavy)"]},
-    {label:"FLEX BODYBUILDING 2",sets:"2-3 sets",exercises:["16 reps DB Romanian Deadlift","90s Rest","20 reps DB Goblet Cossack Squat"]},
-    {label:"FLEX BODYBUILDING 3",sets:"EMOM × 12 min",exercises:["Min 1: Max-Set Hanging Knee Raises","Min 2: Max-Set Kipping Toes To Bar","Min 3: Rest"]}
-  ]},
-  {day:19,title:"BENCH PRESS + PUSH",blocks:[
-    {label:"FLEX STRENGTH",sets:"6 sets",exercises:["4 Bench Press (30X0)"]},
-    {label:"FLEX BODYBUILDING 1",sets:"2 sets",exercises:["Max Reps Bench Press"]},
-    {label:"FLEX BODYBUILDING 2",sets:"3-4 sets",exercises:["12 reps Incline DB Bench Press","90s Rest","16 reps Bent Over DB Row"]},
-    {label:"FLEX BODYBUILDING 3",sets:"2 sets",exercises:["8 reps Weighted Bar Dip (Heavy)"]},
-    {label:"FLEX BODYBUILDING 4",sets:"2 sets",exercises:["Max Set Bodyweight Bar Dips"]},
-    {label:"FLEX BODYBUILDING 5",sets:"EMOM × 8 min",exercises:["Min 1: Max Set Deficit Push-Ups","Min 2: Max Set Inverted Rows"]}
-  ]}
-];
-
-// === FLEX STATE (localStorage) ===
-const LS_PROG='disc_program',LS_FLEX_START='flex_start',LS_FLEX_DONE='flex_done',LS_FLEX_NOTES='flex_notes';
-function loadFlexState(){
-  state.program=localStorage.getItem(LS_PROG)||'jocko';
-  const td=getFlexTodayDay();
-  if(td>=1&&td<=19)state.flexDay=td;
-  else state.flexDay=1;
-}
-function saveProgram(){localStorage.setItem(LS_PROG,state.program);}
-function getFlexStartDate(){return localStorage.getItem(LS_FLEX_START)||null;}
-function getFlexTodayDay(){
-  const s=getFlexStartDate();if(!s)return -1;
-  const sm=new Date(s+'T00:00:00').getTime(),tm=new Date(today()+'T00:00:00').getTime();
-  return Math.floor((tm-sm)/86400000)+1;
-}
-function setFlexStart(){
-  const inp=document.getElementById('flexDateInp');if(!inp||!inp.value)return;
-  localStorage.setItem(LS_FLEX_START,inp.value);
-  const td=getFlexTodayDay();if(td>=1&&td<=19)state.flexDay=td;
-  buildNav();renderFlex();
-}
-function goToFlexDay(d){state.flexDay=d;buildNav();renderFlex();}
-function getFlexDoneBlocks(day){try{const d=JSON.parse(localStorage.getItem(LS_FLEX_DONE)||'{}');return d[String(day)]||[];}catch(e){return[];}}
-function toggleFlexBlock(bi){
-  try{
-    const d=JSON.parse(localStorage.getItem(LS_FLEX_DONE)||'{}');
-    const k=String(state.flexDay),arr=d[k]||[],pos=arr.indexOf(bi);
-    if(pos>=0)arr.splice(pos,1);else arr.push(bi);
-    d[k]=arr;localStorage.setItem(LS_FLEX_DONE,JSON.stringify(d));
-  }catch(e){}
-  buildNav();renderFlex();
-}
-function isFlexDayDone(day){const fd=FLEX_DAYS[day-1];if(!fd)return false;return getFlexDoneBlocks(day).length===fd.blocks.length;}
-function getFlexNote(day){try{const d=JSON.parse(localStorage.getItem(LS_FLEX_NOTES)||'{}');return d[String(day)]||'';}catch(e){return '';}}
-function saveFlexNotes(){
-  const ta=document.getElementById('dayNotesText'),btn=document.getElementById('dayNotesSaveBtn');
-  if(!ta)return;
-  try{const d=JSON.parse(localStorage.getItem(LS_FLEX_NOTES)||'{}');d[String(state.flexDay)]=ta.value;localStorage.setItem(LS_FLEX_NOTES,JSON.stringify(d));}catch(e){}
-  btn.textContent='Saved \u2713';btn.className='day-notes-save-btn saved';
-  setTimeout(()=>{btn.textContent='SAVE NOTES';btn.className='day-notes-save-btn';},2000);
-}
+  _lastMcSec:-1,saving:{}};
 
 function today(){return new Date().toISOString().split("T")[0];}
-function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type==='undo'?' undo':'');clearTimeout(t._to);t._to=setTimeout(()=>t.className="toast",2000);}
+function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type==='undo'?' undo':type==='synced'?' synced':'');clearTimeout(t._to);t._to=setTimeout(()=>t.className="toast",2500);}
 function gp(){return allProgram?allProgram.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
 function gl(){return allLog?allLog.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
 function gm(){return allMetcons?allMetcons.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
@@ -493,28 +305,7 @@ function gn(){return allDayNotes?allDayNotes.find(r=>r.Week==state.week&&r.Day==
 
 function buildNav(){
   const g=document.getElementById("navGrid");g.innerHTML="";
-  // Program toggle
-  const pt=document.createElement("div");pt.className="prog-toggle";
-  [{label:"JOCKO",prog:"jocko"},{label:"FLEX 3.0",prog:"flex"}].forEach(({label,prog})=>{
-    const b=document.createElement("button");b.className="prog-btn"+(state.program===prog?(prog==='jocko'?' active-j':' active-f'):'');
-    b.textContent=label;b.onclick=()=>{state.program=prog;saveProgram();if(prog==='flex'){const td=getFlexTodayDay();if(td>=1&&td<=19)state.flexDay=td;}buildNav();render();};
-    pt.appendChild(b);
-  });
-  g.appendChild(pt);
-  if(state.program==='flex'){
-    // Flex day nav
-    const fn=document.createElement("div");fn.className="flex-nav";
-    for(let d=1;d<=19;d++){
-      const b=document.createElement("button");
-      b.className="flex-day-btn"+(state.flexDay===d?" active":isFlexDayDone(d)?" fdone":"");
-      b.textContent="D"+d;b.onclick=()=>{state.flexDay=d;buildNav();renderFlex();};
-      fn.appendChild(b);
-    }
-    g.appendChild(fn);
-  } else {
-    // Jocko week/day nav
-    for(let w=1;w<=4;w++){const c=document.createElement("div");c.className="nav-week";const wb=document.createElement("button");wb.className="nav-week-btn"+(state.week===w?" active":"");wb.textContent="W"+w;wb.onclick=()=>{state.week=w;state.day=1;switchDay();};c.appendChild(wb);const ds=document.createElement("div");ds.className="nav-days";for(let d=1;d<=4;d++){const db=document.createElement("button");db.className="nav-day-btn"+(state.week===w&&state.day===d?" active":"");db.textContent=DAY_MAP[d];db.onclick=()=>{state.week=w;state.day=d;switchDay();};ds.appendChild(db);}c.appendChild(ds);g.appendChild(c);}
-  }
+  for(let w=1;w<=4;w++){const c=document.createElement("div");c.className="nav-week";const wb=document.createElement("button");wb.className="nav-week-btn"+(state.week===w?" active":"");wb.textContent="W"+w;wb.onclick=()=>{state.week=w;state.day=1;switchDay();};c.appendChild(wb);const ds=document.createElement("div");ds.className="nav-days";for(let d=1;d<=4;d++){const db=document.createElement("button");db.className="nav-day-btn"+(state.week===w&&state.day===d?" active":"");db.textContent=DAY_MAP[d];db.onclick=()=>{state.week=w;state.day=d;switchDay();};ds.appendChild(db);}c.appendChild(ds);g.appendChild(c);}
 }
 
 function switchDay(){state.expandedEx=0;resetMetconState();state.saving={};buildNav();render();}
@@ -522,35 +313,17 @@ function switchDay(){state.expandedEx=0;resetMetconState();state.saving={};build
 function resetMetconState(){state.mcRunning=false;state.mcFinished=false;state.mcSplits=[];state.mcRoundCount=0;state.mcCountdownActive=false;state._lastMcSec=-1;pauseTimer('metcon');resetTimer('metcon');}
 
 async function initialLoad(){
-  loadFlexState();
   document.getElementById("content").innerHTML='<div class="skel"><div class="skel-bar" style="width:65%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:50%"></div><div class="skel-bar short"></div></div><div class="skel"><div class="skel-bar" style="width:70%"></div><div class="skel-bar short"></div></div>';
   buildNav();
-  if(state.program==='flex'){renderFlex();}
-  try{const[pR,lR,mR,nR]=await Promise.all([fetch(API+"?action=getProgram"),fetch(API+"?action=getLog"),fetch(API+"?action=getMetcons"),fetch(API+"?action=getDayNotes")]);const[pD,lD,mD,nD]=await Promise.all([pR.json(),lR.json(),mR.json(),nR.json()]);allProgram=pD;allLog=lD;allMetcons=mD;allDayNotes=nD;dataLoaded=true;if(state.program!=='flex')render();}
-  catch(e){if(state.program!=='flex')document.getElementById("content").innerHTML='<div class="error-msg">Could not reach the sheet. Check connection and refresh.</div>';console.error(e);}
+  try{const[pR,lR,mR,nR]=await Promise.all([fetch(API+"?action=getProgram"),fetch(API+"?action=getLog"),fetch(API+"?action=getMetcons"),fetch(API+"?action=getDayNotes")]);const[pD,lD,mD,nD]=await Promise.all([pR.json(),lR.json(),mR.json(),nR.json()]);allProgram=pD;allLog=lD;allMetcons=mD;allDayNotes=nD;dataLoaded=true;render();}
+  catch(e){document.getElementById("content").innerHTML='<div class="error-msg">Could not reach the sheet. Check connection and refresh.</div>';console.error(e);}
 }
 
 function updateHeader(){
-  if(state.program==='flex'){
-    const fd=FLEX_DAYS[state.flexDay-1];
-    document.getElementById("weekLabel").textContent="FLEX 3.0 \u2014 DAY "+state.flexDay+" OF 19";
-    document.getElementById("dayTitle").textContent=fd?fd.title:"";
-    const b=document.getElementById("gearBadge");b.textContent="FULL GYM";b.className="gear-badge gear-gym";
-    return;
-  }
   const p=gp(),title=p.length?p[0]["Day Title"]:"";document.getElementById("weekLabel").textContent="WEEK "+state.week+" \u2014 "+WEEK_NAMES[state.week];document.getElementById("dayTitle").textContent="DAY "+state.day+": "+title;const gear=p.length?p[0].Gear:"";const b=document.getElementById("gearBadge");b.textContent=gear==="MINIMAL"?"MINIMAL GEAR":"FULL GYM";b.className="gear-badge "+(gear==="MINIMAL"?"gear-min":"gear-gym");
 }
 
 function updateProgress(){
-  if(state.program==='flex'){
-    const fd=FLEX_DAYS[state.flexDay-1];if(!fd)return;
-    const done=getFlexDoneBlocks(state.flexDay),total=fd.blocks.length,pct=total?Math.round(done.length/total*100):0;
-    document.getElementById("setCount").textContent=done.length+"/"+total+" blocks";
-    document.getElementById("setPct").textContent=pct+"%";
-    const f=document.getElementById("progressFill");f.style.width=pct+"%";
-    f.style.background=pct===100?'var(--green)':'var(--flex)';f.className="progress-fill";
-    return;
-  }
   const log=gl(),total=log.length,done=log.filter(l=>l["Actual Weight"]).length,pct=total?Math.round(done/total*100):0;document.getElementById("setCount").textContent=done+"/"+total+" sets";document.getElementById("setPct").textContent=pct+"%";const f=document.getElementById("progressFill");f.style.width=pct+"%";f.style.background='';f.className="progress-fill "+(pct===100?"done":"active");
 }
 
@@ -635,61 +408,8 @@ async function logMetconResult(){
   await apiWrite({action:"logMetcon",week:state.week,day:state.day,date:today(),time:time,score:score,notes:notes});
 }
 
-// === FLEX RENDER ===
-function renderFlex(){
-  updateHeader();updateProgress();
-  const content=document.getElementById("content");content.innerHTML="";
-  const fd=FLEX_DAYS[state.flexDay-1];if(!fd)return;
-  // Schedule card
-  const startDate=getFlexStartDate(),todayDay=getFlexTodayDay();
-  const sch=document.createElement("div");sch.className="flex-schedule";
-  let sh='<div class="flex-sch-label">FLEX 3.0 — SCHEDULE</div>';
-  if(startDate){
-    sh+='<div class="flex-sch-info">Started: <strong>'+startDate+'</strong>';
-    if(todayDay>=1&&todayDay<=19){
-      sh+=' &middot; Today: <strong>Day '+todayDay+'</strong>';
-      if(todayDay!==state.flexDay)sh+=' <button class="prog-btn active-f" style="width:auto;padding:3px 10px;font-size:10px;display:inline-block;margin-left:6px" onclick="goToFlexDay('+todayDay+')">GO TO TODAY</button>';
-    }else if(todayDay>19)sh+=' &middot; <strong style="color:var(--green-light)">Program Complete!</strong>';
-    sh+='</div>';
-    sh+='<div class="flex-sch-row" style="margin-top:8px"><input type="date" class="flex-date-inp" id="flexDateInp" value="'+startDate+'"><button class="flex-sch-btn" onclick="setFlexStart()">UPDATE</button></div>';
-  }else{
-    sh+='<div class="flex-sch-info" style="margin-bottom:8px">Set a start date to auto-navigate to today\'s day</div>';
-    sh+='<div class="flex-sch-row"><input type="date" class="flex-date-inp" id="flexDateInp"><button class="flex-sch-btn" onclick="setFlexStart()">SET START</button></div>';
-  }
-  sch.innerHTML=sh;content.appendChild(sch);
-  // Workout blocks
-  const doneBlocks=getFlexDoneBlocks(state.flexDay);
-  fd.blocks.forEach((block,bi)=>{
-    const isDone=doneBlocks.includes(bi);
-    const card=document.createElement("div");card.className="flex-block"+(isDone?" bdone":"");
-    let h='<div class="flex-block-top"><div><div class="flex-blabel">'+block.label+(isDone?' \u2713':'')+'</div><div class="flex-bsets">'+block.sets+'</div></div>';
-    h+='<button class="flex-done-btn '+(isDone?'chk':'unc')+'" onclick="toggleFlexBlock('+bi+')">'+(isDone?'\u2713 DONE':'MARK DONE')+'</button></div>';
-    h+='<div class="flex-exlist">';
-    block.exercises.forEach(ex=>{
-      const lc=ex.toLowerCase();
-      const isRest=lc.includes(' rest')&&(lc.includes('min ')||lc.includes('s rest')||/^\d/.test(lc));
-      const isEmom=lc.startsWith('min ')||lc.startsWith('minute ');
-      let cls='flex-exline'+(isRest?' is-rest':isEmom?' is-emom':'');
-      h+='<div class="'+cls+'">'+(isRest||isEmom?'':'\u2022 ')+ex+'</div>';
-    });
-    h+='</div>';
-    card.innerHTML=h;content.appendChild(card);
-  });
-  // Completion banner
-  if(doneBlocks.length===fd.blocks.length){
-    const banner=document.createElement("div");banner.className="flex-complete-banner";
-    banner.innerHTML='<div style="font-size:20px;font-weight:800;color:var(--flex-light)">DAY '+state.flexDay+' COMPLETE</div><div style="font-size:13px;color:var(--dim);margin-top:6px">'+(state.flexDay<19?(19-state.flexDay)+' day'+(19-state.flexDay!==1?'s':'')+' remaining':'You finished FLEX 3.0. GOOD.')+'</div>';
-    content.appendChild(banner);
-  }
-  // Day notes
-  const nc=document.createElement("div");nc.className="day-notes-card";
-  nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div></div><textarea class="day-notes-textarea" id="dayNotesText" placeholder="How did the session go? Energy, sleep, bodyweight, form notes...">'+getFlexNote(state.flexDay).replace(/</g,'&lt;')+'</textarea><button class="day-notes-save-btn" id="dayNotesSaveBtn" onclick="saveFlexNotes()">SAVE NOTES</button>';
-  content.appendChild(nc);
-}
-
 // === RENDER ===
 function render(){
-  if(state.program==='flex'){renderFlex();return;}
   updateHeader();updateProgress();
   const content=document.getElementById("content");content.innerHTML="";
   const program=gp(),log=gl(),metcons=gm();
@@ -715,7 +435,7 @@ function render(){
     card.appendChild(header);
     if(expanded){
       const area=document.createElement("div");area.className="sets-area";
-      area.innerHTML='<div class="set-headers"><div style="width:24px">SET</div><div style="width:62px;text-align:center">TARGET</div><div style="width:58px;text-align:center">LBS</div><div style="width:46px;text-align:center">REPS</div><div style="width:32px;text-align:center">REST</div><div style="width:36px"></div></div>';
+      area.innerHTML='<div class="set-headers"><div style="width:24px">SET</div><div style="width:62px;text-align:center">TARGET</div><div style="width:58px;text-align:center">LBS</div><div style="width:48px;text-align:center">REPS</div><div style="width:32px;text-align:center">REST</div><div style="width:44px"></div></div>';
       sets.forEach((s,si)=>{
         const isSaved=!!s["Actual Weight"];const firstEmpty=sets.findIndex(x=>!x["Actual Weight"]);const isActive=si===firstEmpty;
         const tw=s["Target Weight"]||"\u2014";const tr=s["Target Reps"]==="MAX"?"MAX":(s["Target Reps"]||"\u2014");
@@ -852,6 +572,7 @@ async function toggleSet(exIdx,setIdx,currentlySaved){
     const restSec=getRestSec(ex.Exercise,s["Target Reps"],state.week);
     startRestFn(restSec,ex.Exercise);
     const ok=await apiWrite({action:"logSet",week:s.Week,day:s.Day,exercise:s.Exercise,setNum:s["Set #"],date:today(),weight:Number(w)||0,reps:Number(r)||0});
+    if(ok)toast("Synced to sheet");
     if(!ok){/* stays in queue, UI already updated optimistically */}
   }
   state.saving[sk]=false;
