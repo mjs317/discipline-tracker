@@ -1,10 +1,10 @@
-# Discipline Tracker
+# Protocol
 
-Jocko-style workout tracker PWA for the 4-week program (4 days per week). Log sets on your phone at the gym, then sync to a Google Sheet when you're done.
+Jocko-style workout tracker PWA for the 4-week program (5 days per week). Log sets on your phone at the gym, then sync to a Google Sheet when you're done.
 
 ## Features
 
-- **Jocko program**: Week 1–4, Day 1–4 from a Google Sheet
+- **Jocko program**: Week 1–4, Day 1–5 from a Google Sheet
 - **Local-first logging**: Log and edit sets on device; tap **SYNC** to push to the sheet
 - **Rest timer**: Auto-suggested rest by exercise type; Skip, +30s, and bell on/off
 - **Metcon**: For time, AMRAP, EMOM with countdown and round tracking
@@ -40,7 +40,7 @@ The app references `favicon.png`, `icon-180.png`, and in the manifest `icon-192.
 
 ## Starting a new cycle
 
-When you finish the 4 weeks (Week 4, Day 4), a **Start new cycle** card appears at the bottom. Tap it to clear local workout data, return to Week 1 Day 1, and refetch the log. Your previous cycle stays on the sheet (each row has a date). To archive: in Google Sheets, copy the Log sheet to e.g. Log_Archive_2025-01 and optionally clear the Log sheet for a clean slate. The program (exercises) is unchanged.
+When you finish the 4 weeks (Week 4, Day 5), a **Start new cycle** card appears at the bottom. Tap it to clear local workout data, return to Week 1 Day 1, and refetch the log. Your previous cycle stays on the sheet (each row has a date). To archive: in Google Sheets, copy the Log sheet to e.g. Log_Archive_2025-01 and optionally clear the Log sheet for a clean slate. The program (exercises) is unchanged.
 
 ### How the sheet keeps old and new cycle data
 

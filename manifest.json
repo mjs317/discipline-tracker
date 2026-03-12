@@ -1,6 +1,6 @@
 {
-  "name": "Discipline Equals Freedom",
-  "short_name": "DISCIPLINE",
+  "name": "Protocol",
+  "short_name": "PROTOCOL",
   "description": "Jocko-style workout tracker",
   "start_url": "/discipline-tracker/",
   "display": "standalone",

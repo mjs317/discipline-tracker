@@ -1,5 +1,5 @@
 /**
- * Discipline Tracker — Google Apps Script
+ * Protocol — Google Apps Script
  * Serves the PWA: getProgram, getLog, getMetcons, getDayNotes (GET)
  * and logSet, logMetcon, logDayNotes (POST).
  *

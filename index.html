@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="DISCIPLINE">
+<meta name="apple-mobile-web-app-title" content="PROTOCOL">
 <meta name="theme-color" content="#141414">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>Discipline Equals Freedom</title>
+<title>Protocol</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -167,7 +167,7 @@ button{font-family:inherit}
 <div id="offlineBadge" class="offline-badge">OFFLINE — Will sync when back online</div>
 <div id="toast" class="toast"></div>
 <div class="header">
-<div class="header-top"><div><div class="week-label" id="weekLabel">WEEK 1 — DISCIPLINE</div><div class="day-title" id="dayTitle">Loading...</div></div><div class="gear-badge gear-gym" id="gearBadge">—</div></div>
+<div class="header-top"><div><div class="week-label" id="weekLabel">WEEK 1 — PROTOCOL</div><div class="day-title" id="dayTitle">Loading...</div></div><div class="gear-badge gear-gym" id="gearBadge">—</div></div>
 <div class="nav-grid" id="navGrid"></div>
 <div id="unsyncedBanner" class="unsynced-banner" style="display:none">Local changes — tap <button type="button" onclick="document.getElementById('syncBtn').click()">SYNC</button> to save to sheet</div>
 <div class="progress-row"><div class="progress-bar-wrap"><div class="progress-info"><span id="setCount">0/0 sets</span><span id="setPct">0%</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div><button class="ctrl-btn" id="workoutTimer" onclick="toggleWorkoutTimer()">START</button><button class="ctrl-btn sync-btn" id="syncBtn" onclick="syncWorkoutToSheet()" title="Sync all sets to Google Sheet">SYNC</button></div>
@@ -187,7 +187,7 @@ function playCountdown(){try{initAudio();const n=audioCtx.currentTime,o=audioCtx
 function haptic(ms){try{navigator.vibrate(ms||10);}catch(e){}}
 
 const API="https://script.google.com/macros/s/AKfycbwI0tMnH5Ln54Ha4j4irdfcJuwHAcVVr9fe-2bbyG3LDQosGfH5cldHrqP7rk6uA3k/exec";
-const WEEK_NAMES={1:"DISCIPLINE",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"};
+const WEEK_NAMES={1:"PROTOCOL",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"};
 const DAY_MAP={1:"D1",2:"D2",3:"D3",4:"D4",5:"D5"};
 let allProgram=null,allLog=null,allMetcons=null,allDayNotes=null,dataLoaded=false;
 

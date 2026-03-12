@@ -1,4 +1,4 @@
-# Google Apps Script for Discipline Tracker
+# Google Apps Script for Protocol
 
 Copy the contents of `Code.gs` into your Google Apps Script project (script.google.com, bound to your Sheet or standalone).
 
