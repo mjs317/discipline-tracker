@@ -224,24 +224,21 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 let writeQueue=[];
 async function apiWrite(data){
   try{
-    const res=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});
-    const text=await res.text();
-    let parsed=null;
-    try{parsed=JSON.parse(text);}catch(_){}
-    if(!res.ok)throw new Error(parsed&&parsed.error?parsed.error:'HTTP '+res.status);
-    if(parsed&&parsed.error)throw new Error(parsed.error);
+    const res=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(data)});
+    if(!res.ok)throw new Error('HTTP '+res.status);
     document.getElementById('offlineBadge').style.display='none';
     // Flush queue
-    if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});}catch(e2){writeQueue.push(d);}}}
+    if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)});}catch(e2){writeQueue.push(d);}}}
     return true;
   }catch(e){
+    console.error('apiWrite error:',e.message||e);
     writeQueue.push(data);
     document.getElementById('offlineBadge').style.display='block';
     return false;
   }
 }
 // Retry queue periodically
-setInterval(async()=>{if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});}catch(e){writeQueue.push(d);}}if(writeQueue.length===0)document.getElementById('offlineBadge').style.display='none';}},15000);
+setInterval(async()=>{if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)});}catch(e){writeQueue.push(d);}}if(writeQueue.length===0)document.getElementById('offlineBadge').style.display='none';}},15000);
 
 // === BACKGROUND-SAFE TIMESTAMP TIMERS ===
 // Instead of counting via setInterval, store start timestamps and compute elapsed
