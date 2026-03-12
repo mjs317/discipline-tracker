@@ -188,7 +188,7 @@ function haptic(ms){try{navigator.vibrate(ms||10);}catch(e){}}
 
 const API="https://script.google.com/macros/s/AKfycbwI0tMnH5Ln54Ha4j4irdfcJuwHAcVVr9fe-2bbyG3LDQosGfH5cldHrqP7rk6uA3k/exec";
 const WEEK_NAMES={1:"DISCIPLINE",2:"GET AFTER IT",3:"GOOD",4:"RECOVER & RELOAD"};
-const DAY_MAP={1:"D1",2:"D2",3:"D3",4:"D4"};
+const DAY_MAP={1:"D1",2:"D2",3:"D3",4:"D4",5:"D5"};
 let allProgram=null,allLog=null,allMetcons=null,allDayNotes=null,dataLoaded=false;
 
 const LS_LOG_PREFIX='disc_log_';
@@ -198,7 +198,7 @@ const LS_EXPANDED='disc_expanded_';
 const LS_CYCLE='disc_cycle_start';
 function saveLocalLog(){if(!allLog)return;try{localStorage.setItem(LS_LOG_PREFIX+state.week+'_'+state.day,JSON.stringify(gl()));}catch(e){}}
 function saveView(){try{localStorage.setItem(LS_VIEW,JSON.stringify({week:state.week,day:state.day}));}catch(e){}}
-function loadView(){try{const v=localStorage.getItem(LS_VIEW);if(v){const p=JSON.parse(v);if(p.week>=1&&p.week<=4&&p.day>=1&&p.day<=4){state.week=p.week;state.day=p.day;}}}catch(e){}}
+function loadView(){try{const v=localStorage.getItem(LS_VIEW);if(v){const p=JSON.parse(v);if(p.week>=1&&p.week<=4&&p.day>=1&&p.day<=5){state.week=p.week;state.day=p.day;}}}catch(e){}}
 function hasUnsyncedWorkout(){try{return !!localStorage.getItem(LS_LOG_PREFIX+state.week+'_'+state.day);}catch(e){return false;}}
 function getBellMuted(){try{return localStorage.getItem(LS_BELL)==='1';}catch(e){return false;}}
 function setBellMuted(m){try{localStorage.setItem(LS_BELL,m?'1':'0');}catch(e){}}
@@ -208,7 +208,7 @@ function saveExpanded(){try{localStorage.setItem(LS_EXPANDED+state.week+'_'+stat
 function loadExpanded(){try{const v=localStorage.getItem(LS_EXPANDED+state.week+'_'+state.day);if(v!==null){const n=parseInt(v,10);if(!isNaN(n)&&n>=0)state.expandedEx=n;}else state.expandedEx=0;}catch(e){state.expandedEx=0;}}
 function mergeLocalLogIntoAllLog(){
   if(!allLog)return;
-  for(let w=1;w<=4;w++)for(let d=1;d<=4;d++){
+  for(let w=1;w<=4;w++)for(let d=1;d<=5;d++){
     try{const raw=localStorage.getItem(LS_LOG_PREFIX+w+'_'+d);if(!raw)continue;
     const rows=JSON.parse(raw);if(!Array.isArray(rows)||!rows.length)continue;
     allLog=allLog.filter(r=>!(r.Week==w&&r.Day==d)).concat(rows);
@@ -342,14 +342,27 @@ let state={week:1,day:1,expandedEx:0,workoutRunning:false,restVisible:false,
 function today(){return new Date().toISOString().split("T")[0];}
 function escapeHtml(s){if(s==null)return'';const t=String(s);return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toast(msg,type){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(type==='undo'?' undo':type==='synced'?' synced':'');clearTimeout(t._to);t._to=setTimeout(()=>t.className="toast",2500);}
-function gp(){return allProgram?allProgram.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
+function normWeek(v){if(v==null||v==='')return null;const s=String(v).trim().toUpperCase();if(s==='A')return 1;const n=parseInt(v,10);return isNaN(n)?null:n;}
+function normDay(v){if(v==null||v==='')return null;const n=parseInt(v,10);return isNaN(n)?null:n;}
+function gp(){if(!allProgram)return [];const w=state.week,d=state.day;return allProgram.filter(r=>normWeek(r.Week)===w&&normDay(r.Day)===d);}
 function gl(){if(!allLog)return[];const cycleStart=getCycleStartDate();return allLog.filter(r=>r.Week==state.week&&r.Day==state.day&&((r.Date&&String(r.Date).slice(0,10)>=cycleStart)||(!r.Date&&cycleStart==='2000-01-01')));}
 function gm(){return allMetcons?allMetcons.filter(r=>r.Week==state.week&&r.Day==state.day):[];}
 function gn(){return allDayNotes?allDayNotes.find(r=>r.Week==state.week&&r.Day==state.day)||null:null;}
+function getEffectiveSets(ex,log){
+  const targetCount=Math.max(1,parseInt(ex["Target Sets"],10)||1);
+  const fromLog=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>(a["Set #"]||0)-(b["Set #"]||0));
+  const out=[];
+  for(let i=0;i<targetCount;i++){
+    const existing=fromLog.find(s=>s["Set #"]==i+1);
+    if(existing)out.push(existing);
+    else out.push({Week:state.week,Day:state.day,Exercise:ex.Exercise,"Set #":i+1,"Target Weight":ex["Target Weight"],"Target Reps":ex["Target Reps"],"Actual Weight":"","Actual Reps":"",Date:""});
+  }
+  return out;
+}
 
 function buildNav(){
   const g=document.getElementById("navGrid");g.innerHTML="";
-  for(let w=1;w<=4;w++){const c=document.createElement("div");c.className="nav-week";const wb=document.createElement("button");wb.className="nav-week-btn"+(state.week===w?" active":"");wb.textContent="W"+w;wb.onclick=()=>{state.week=w;state.day=1;switchDay();};c.appendChild(wb);const ds=document.createElement("div");ds.className="nav-days";for(let d=1;d<=4;d++){const db=document.createElement("button");db.className="nav-day-btn"+(state.week===w&&state.day===d?" active":"");db.textContent=DAY_MAP[d];db.onclick=()=>{state.week=w;state.day=d;switchDay();};ds.appendChild(db);}c.appendChild(ds);g.appendChild(c);}
+  for(let w=1;w<=4;w++){const c=document.createElement("div");c.className="nav-week";const wb=document.createElement("button");wb.className="nav-week-btn"+(state.week===w?" active":"");wb.textContent="W"+w;wb.onclick=()=>{state.week=w;state.day=1;switchDay();};c.appendChild(wb);const ds=document.createElement("div");ds.className="nav-days";for(let d=1;d<=5;d++){const db=document.createElement("button");db.className="nav-day-btn"+(state.week===w&&state.day===d?" active":"");db.textContent=DAY_MAP[d];db.onclick=()=>{state.week=w;state.day=d;switchDay();};ds.appendChild(db);}c.appendChild(ds);g.appendChild(c);}
 }
 
 function switchDay(){state._clearConfirm=null;resetMetconState();state.saving={};loadExpanded();saveView();buildNav();render();}
@@ -368,7 +381,11 @@ function updateHeader(){
 }
 
 function updateProgress(){
-  const log=gl(),total=log.length,done=log.filter(l=>l["Actual Weight"]).length,pct=total?Math.round(done/total*100):0;
+  const program=gp(),log=gl();
+  const seenEx=new Set();
+  const total=program.reduce((sum,ex)=>{if(seenEx.has(ex.Exercise))return sum;seenEx.add(ex.Exercise);return sum+(parseInt(ex["Target Sets"],10)||1);},0);
+  const done=log.filter(l=>l["Actual Weight"]).length;
+  const pct=total?Math.round(done/total*100):0;
   const totalVol=log.reduce((sum,l)=>{const w=Number(l["Actual Weight"])||0,r=Number(l["Actual Reps"])||0;return sum+w*r;},0);
   document.getElementById("setCount").textContent=done+"/"+total+" sets"+(totalVol>0?" \u00B7 "+Math.round(totalVol).toLocaleString()+" lbs":"");
   document.getElementById("setPct").textContent=pct+"%";const f=document.getElementById("progressFill");f.style.width=pct+"%";f.style.background='';f.className="progress-fill "+(pct===100?"done":"active");
@@ -472,7 +489,7 @@ function render(){
   if(!exercises.length){content.innerHTML='<div class="loading">No workout for W'+state.week+'D'+state.day+'</div>';return;}
 
   exercises.forEach((ex,i)=>{
-    const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
+    const sets=getEffectiveSets(ex,log);
     const completed=sets.filter(s=>s["Actual Weight"]).length;
     const allDone=completed===sets.length&&sets.length>0;
     const expanded=state.expandedEx===i;
@@ -591,8 +608,8 @@ function render(){
   nc.innerHTML='<div class="day-notes-header"><div class="day-notes-label">SESSION NOTES</div></div><div class="day-notes-prompts"><div class="day-notes-prompt" onclick="insertPrompt(\'Energy level:\')">'+'\u26A1 Energy</div><div class="day-notes-prompt" onclick="insertPrompt(\'Sleep:\')">'+'\uD83D\uDE34 Sleep</div><div class="day-notes-prompt" onclick="insertPrompt(\'Body weight:\')">'+'\u2696\uFE0F Weight</div><div class="day-notes-prompt" onclick="insertPrompt(\'Pain/tightness:\')">'+'\uD83D\uDD34 Pain</div><div class="day-notes-prompt" onclick="insertPrompt(\'Form notes:\')">'+'\uD83D\uDCCB Form</div><div class="day-notes-prompt" onclick="insertPrompt(\'Next session:\')">'+'\u27A1\uFE0F Next</div></div><textarea class="day-notes-textarea" id="dayNotesText" placeholder="How did the session go? Energy, sleep, bodyweight, anything that felt off, PRs, adjustments...">'+escapeHtml(noteText)+'</textarea><button class="day-notes-save-btn" id="dayNotesSaveBtn" onclick="saveDayNotes()">SAVE NOTES</button>';
   content.appendChild(nc);
 
-  // === START NEW CYCLE (when on W4 D4) ===
-  if(state.week===4&&state.day===4){
+  // === START NEW CYCLE (when on W4 D5) ===
+  if(state.week===4&&state.day===5){
     const cycleCard=document.createElement("div");cycleCard.className="cycle-card";
     cycleCard.innerHTML='<div class="cycle-title">4-week cycle complete</div><div class="cycle-desc">Start a new cycle with the same program. Sync first to save this cycle to the sheet.</div><button type="button" class="cycle-btn" onclick="startNewCycle()">Start new cycle</button>';
     content.appendChild(cycleCard);
@@ -615,8 +632,10 @@ function toggleSet(exIdx,setIdx,currentlySaved){
   const program=gp(),log=gl(),exercises=[],seen=new Set();
   program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
   const ex=exercises[exIdx];
-  const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
-  const s=sets[setIdx];state.saving[sk]=true;haptic(15);
+  const sets=getEffectiveSets(ex,log);
+  const s=sets[setIdx];if(!s){state.saving[sk]=false;return;}
+  if(!allLog.includes(s))allLog.push(s);
+  state.saving[sk]=true;haptic(15);
   const wInp=document.getElementById('w_'+exIdx+'_'+setIdx),rInp=document.getElementById('r_'+exIdx+'_'+setIdx);
   const wVal=wInp?Number(wInp.value)||0:0,rVal=rInp?Number(rInp.value)||0:0;
   if(currentlySaved){
@@ -648,7 +667,7 @@ function toggleSet(exIdx,setIdx,currentlySaved){
 function copyPrevSet(exIdx,setIdx){
   const program=gp(),log=gl(),exercises=[],seen=new Set();
   program.forEach(p=>{if(!seen.has(p.Exercise)){seen.add(p.Exercise);exercises.push(p);}});
-  const ex=exercises[exIdx];const sets=log.filter(l=>l.Exercise===ex.Exercise).sort((a,b)=>a["Set #"]-b["Set #"]);
+  const ex=exercises[exIdx];const sets=getEffectiveSets(ex,log);
   if(setIdx===0)return;
   const prev=sets[setIdx-1];
   const w=prev["Actual Weight"]!=null&&prev["Actual Weight"]!==""?prev["Actual Weight"]:'';
@@ -689,7 +708,7 @@ document.addEventListener('touchmove',e=>{if(pullStart>0){const d=e.touches[0].c
 document.addEventListener('touchend',()=>{if(pulling){pulling=false;pullStart=0;const pi=document.getElementById('pullIndicator');if(pi){pi.textContent='Refreshing… (local data kept)';pi.style.height='30px';}initialLoad().then(()=>{if(pi){pi.textContent='';pi.style.height='0';}});}else{pullStart=0;}},{passive:true});
 
 async function startNewCycle(){
-  for(let w=1;w<=4;w++)for(let d=1;d<=4;d++){try{localStorage.removeItem(LS_LOG_PREFIX+w+'_'+d);localStorage.removeItem(LS_EXPANDED+w+'_'+d);}catch(e){}}
+  for(let w=1;w<=4;w++)for(let d=1;d<=5;d++){try{localStorage.removeItem(LS_LOG_PREFIX+w+'_'+d);localStorage.removeItem(LS_EXPANDED+w+'_'+d);}catch(e){}}
   state.week=1;state.day=1;state.expandedEx=0;state._clearConfirm=null;
   const cycleStart=today();
   saveCycleStartDate(cycleStart);
