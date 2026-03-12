@@ -224,11 +224,15 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 let writeQueue=[];
 async function apiWrite(data){
   try{
-    const res=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(data)});
-    if(!res.ok)throw new Error('HTTP '+res.status);
+    const res=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});
+    const text=await res.text();
+    let parsed=null;
+    try{parsed=JSON.parse(text);}catch(_){}
+    if(!res.ok)throw new Error(parsed&&parsed.error?parsed.error:'HTTP '+res.status);
+    if(parsed&&parsed.error)throw new Error(parsed.error);
     document.getElementById('offlineBadge').style.display='none';
     // Flush queue
-    if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)});}catch(e2){writeQueue.push(d);}}}
+    if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});}catch(e2){writeQueue.push(d);}}}
     return true;
   }catch(e){
     writeQueue.push(data);
@@ -237,7 +241,7 @@ async function apiWrite(data){
   }
 }
 // Retry queue periodically
-setInterval(async()=>{if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(d)});}catch(e){writeQueue.push(d);}}if(writeQueue.length===0)document.getElementById('offlineBadge').style.display='none';}},15000);
+setInterval(async()=>{if(writeQueue.length>0){const q=[...writeQueue];writeQueue=[];for(const d of q){try{await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});}catch(e){writeQueue.push(d);}}if(writeQueue.length===0)document.getElementById('offlineBadge').style.display='none';}},15000);
 
 // === BACKGROUND-SAFE TIMESTAMP TIMERS ===
 // Instead of counting via setInterval, store start timestamps and compute elapsed
@@ -394,13 +398,37 @@ function updateProgress(){
 }
 
 // === REST TIMER ===
-function startRestFn(sec,exName,nextExName){timers.rest.target=sec;timers.rest.exercise=exName||'';timers.rest.nextExercise=nextExName||'';timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');state.restVisible=true;}
+function startRestFn(sec,exName,nextExName){timers.rest.target=sec;timers.rest.exercise=exName||'';timers.rest.nextExercise=nextExName||'';timers.rest.pausedElapsed=0;timers.rest._belled=false;const el=document.getElementById("restTimer");if(el)el.innerHTML="";startTimer('rest');state.restVisible=true;}
 function renderRestDisplay(remaining){
-  const el=document.getElementById("restTimer");if(!el)return;el.style.display="flex";
+  const el=document.getElementById("restTimer");if(!el)return;
+  el.style.display="flex";
   const ov=remaining<=0,a=Math.abs(remaining),m=Math.floor(a/60),s=a%60;
+  const timeStr=(ov?'+':'')+m+':'+s.toString().padStart(2,'0');
   el.className="rest-timer "+(ov?"over":"normal");
   const ps=[60,90,120,180,240];
-  el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time">'+(ov?'+':'')+m+':'+s.toString().padStart(2,'0')+'</div>'+(timers.rest.exercise?'<div class="rest-exercise">'+escapeHtml(timers.rest.exercise)+'</div>':'')+(timers.rest.nextExercise?'<div class="rest-next">Next: '+escapeHtml(timers.rest.nextExercise)+'</div>':'')+'</div><div class="rest-controls">'+ps.map(p=>'<button class="rest-preset'+(timers.rest.target===p?' active-preset':'')+'" onclick="setRestPreset('+p+')">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button class="rest-add30" onclick="addRest30()">+30s</button><button class="rest-skip" onclick="skipRest()">Skip</button><button class="rest-toggle '+(timers.rest.running?'pause':'play')+'" onclick="toggleRestPause()">'+(timers.rest.running?'\u23F8':'\u25B6')+'</button><button class="rest-bell'+(getBellMuted()?' muted':'')+'" onclick="toggleBellMuted()" title="'+(getBellMuted()?'Turn bell on':'Turn bell off')+'">\uD83D\uDD14</button><button class="rest-close" onclick="closeRest()">\u2715</button></div>';
+  // Only replace full HTML when controls aren't there yet (avoids nuking buttons every 250ms so clicks work)
+  const existingTime=document.getElementById("restTimeDisplay");
+  if(!existingTime){
+    el.innerHTML='<div><div class="rest-label">'+(ov?'OVER BY':'REST')+'</div><div class="rest-time" id="restTimeDisplay">'+timeStr+'</div>'+(timers.rest.exercise?'<div class="rest-exercise">'+escapeHtml(timers.rest.exercise)+'</div>':'')+(timers.rest.nextExercise?'<div class="rest-next">Next: '+escapeHtml(timers.rest.nextExercise)+'</div>':'')+'</div><div class="rest-controls" id="restControls">'+ps.map(p=>'<button type="button" class="rest-preset'+(timers.rest.target===p?' active-preset':'')+'" data-preset="'+p+'">'+(p>=120?(p/60)+'m':p+'s')+'</button>').join('')+'<button type="button" class="rest-add30">+30s</button><button type="button" class="rest-skip">Skip</button><button type="button" class="rest-toggle '+(timers.rest.running?'pause':'play')+'">'+(timers.rest.running?'\u23F8':'\u25B6')+'</button><button type="button" class="rest-bell'+(getBellMuted()?' muted':'')+'" title="'+(getBellMuted()?'Turn bell on':'Turn bell off')+'">\uD83D\uDD14</button><button type="button" class="rest-close">\u2715</button></div>';
+    const ctrl=document.getElementById("restControls");
+    if(ctrl){
+      ctrl.addEventListener("click",function(ev){
+        const t=ev.target.closest("button");if(!t)return;
+        if(t.classList.contains("rest-preset")){setRestPreset(parseInt(t.getAttribute("data-preset"),10));return;}
+        if(t.classList.contains("rest-add30")){addRest30();return;}
+        if(t.classList.contains("rest-skip")){skipRest();return;}
+        if(t.classList.contains("rest-toggle")){toggleRestPause();return;}
+        if(t.classList.contains("rest-bell")){toggleBellMuted();return;}
+        if(t.classList.contains("rest-close")){closeRest();return;}
+      });
+    }
+  }else{
+    existingTime.textContent=timeStr;
+    const label=el.querySelector(".rest-label");if(label)label.textContent=ov?'OVER BY':'REST';
+    el.querySelectorAll(".rest-preset").forEach(btn=>{const p=parseInt(btn.getAttribute("data-preset"),10);btn.classList.toggle("active-preset",timers.rest.target===p);});
+    const toggleBtn=el.querySelector(".rest-toggle");if(toggleBtn){toggleBtn.textContent=timers.rest.running?'\u23F8':'\u25B6';toggleBtn.className="rest-toggle "+(timers.rest.running?'pause':'play');}
+    const bellBtn=el.querySelector(".rest-bell");if(bellBtn){bellBtn.classList.toggle("muted",getBellMuted());bellBtn.title=getBellMuted()?'Turn bell on':'Turn bell off';}
+  }
 }
 function setRestPreset(s){timers.rest.target=s;timers.rest.pausedElapsed=0;timers.rest._belled=false;startTimer('rest');}
 function toggleRestPause(){if(timers.rest.running)pauseTimer('rest');else startTimer('rest');}
@@ -680,7 +708,8 @@ function copyPrevSet(exIdx,setIdx){
 
 async function syncWorkoutToSheet(){
   const btn=document.getElementById('syncBtn');if(!btn||btn.classList.contains('syncing'))return;
-  const rows=gl();if(!rows.length){toast("No sets to sync");return;}
+  const rows=gl().filter(r=>r["Actual Weight"]!=null&&r["Actual Weight"]!==""||r["Actual Reps"]!=null&&r["Actual Reps"]!=="");
+  if(!rows.length){toast("No sets to sync");return;}
   btn.classList.add('syncing');btn.textContent='Syncing…';
   let okCount=0,failCount=0;
   for(const row of rows){
@@ -688,10 +717,14 @@ async function syncWorkoutToSheet(){
     const ok=await apiWrite(payload);if(ok)okCount++;else failCount++;
   }
   try{localStorage.removeItem(LS_LOG_PREFIX+state.week+'_'+state.day);}catch(e){}
+  if(okCount>0&&failCount===0){
+    try{const lR=await fetch(API+"?action=getLog");allLog=await lR.json();}catch(e){}
+  }
   btn.classList.remove('syncing');btn.textContent='SYNC';
+  updateProgress();
   if(failCount===0){haptic(50);toast("Synced "+okCount+" sets to sheet");}
-  else if(okCount>0)toast(failCount+" failed \u2014 tap SYNC again to retry","undo");
-  else toast("Offline \u2014 tap SYNC again when back online","undo");
+  else if(okCount>0)toast(failCount+" failed — tap SYNC again to retry","undo");
+  else toast("Offline — tap SYNC again when back online","undo");
 }
 
 // === WORKOUT TIMER ===
